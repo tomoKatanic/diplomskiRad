@@ -1,0 +1,4 @@
+riscv_core.cache/
+.vivado.jou
+.vivado.log
+*.str
