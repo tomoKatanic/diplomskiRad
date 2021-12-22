@@ -120,19 +120,33 @@
   module core(
         input clk, 
         input reset, 
+
+        output reg rv_m_valid,
+        output reg rv_m_rw,
+        input rv_m_ready,
+        
+        input [32-1:0] rv_m_rdata,
+        output reg [32-1:0] rv_m_addr,
+        output reg [32-1:0] rv_m_wdata,
+        
         output reg [7:0] dmem_result,
         output reg [32-1:0] xreg_out [31:0],   // use these 2 outputs only for Simulation, 
-        output reg [32-1:0] dmem_out [31:0]    // comment them when running Implementation
+        output reg [32-1:0] dmem_out [31:0]    // comment them when running Implementation      
    );
 
 
 genvar dmem, xreg;
 
+localparam  
+    FETCH = 2'b00,
+    DECODE = 2'b01,
+    LD = 2'b10,
+    STR = 2'b11;
 
 //
 // Signals declared top-level.
 //
-
+logic [1:0] state;
 // For $br_tgt_pc.
 logic [31:0] br_tgt_pc;
 
@@ -376,7 +390,9 @@ logic [32-1:0] Xreg_value_n1 [31:0],
 generate
 
    // For $next_pc.
-   always_ff @(posedge clk) next_pc_a1[31:0] <= next_pc[31:0];
+   always_ff @(posedge clk) begin
+        next_pc_a1[31:0] <= next_pc[31:0];
+   end
 
 
    //
@@ -415,8 +431,14 @@ generate
                           pc + 32'd4;
    // ---------- (2) IMEM -----------------------------------
    `READONLY_MEM(pc, instr[31:0]);
+    always @(pc) begin
+        state = FETCH;
+    end
    
    // ---------- (3) DECODE/INSTR_TYPE ----------------------
+   always @(instr) begin
+        state = DECODE;
+   end
    assign is_u_instr = instr[6:2] == 5'b00101 ||
                        instr[6:2] == 5'b01101;
    // or: $is_u_instr = $instr[6:2] ==? 5'b0x101;             
@@ -500,7 +522,17 @@ generate
    // this implementation treats all loads and all stores the same
    assign is_load  = opcode == 7'b0000011;
    // $is_s_instr already identifies stores
+   always @ (is_load) begin
+        if (is_load) begin
+            state = LD;
+        end
+   end
    
+   always @ (is_s_instr) begin
+        if (is_s_instr) begin
+            state = STR;
+        end
+   end
    
    
    // ---------- (5) ALU ---------------------------------------
@@ -640,6 +672,39 @@ generate
              dmem_out = Dmem_value_a0;          
        end
        
+       
+       always @ (state) begin
+            case(state)
+                FETCH: begin
+                    rv_m_addr = pc;
+                    rv_m_rw = 1'b0;
+                    rv_m_valid = 1'b1;
+                end   
+                DECODE: begin
+                    rv_m_valid = 1'b0;
+                end
+                LD: begin
+                    rv_m_rw = 1'b0;
+                    rv_m_addr = result;
+                    rv_m_valid = 1'b1;
+                end
+                STR: begin
+                    rv_m_rw = 1'b1;
+                    rv_m_addr = result; 
+                    rv_m_wdata = src2_value;
+                    rv_m_valid = 1'b1;
+                end
+            endcase 
+       end
+       //----------------------------MEM------------------------------------------
+       always @ (rv_m_rdata) begin
+            if (state == FETCH) begin
+                instr = rv_m_rdata;
+            end 
+            else if(state == LD ) begin
+                ld_data = rv_m_rdata;
+            end
+       end
 
 
 endgenerate
