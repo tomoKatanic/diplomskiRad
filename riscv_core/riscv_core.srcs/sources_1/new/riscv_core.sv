@@ -153,17 +153,11 @@ logic [31:0] br_tgt_pc;
 // For $dec_bits.
 logic [10:0] dec_bits;
 
-// For $dmem_addr.
-logic [$clog2(32)-1:0] dmem_addr;
-
-// For $dmem_rd_en.
-logic dmem_rd_en;
-
 // For $dmem_wr_data.
-logic [32-1:0] dmem_wr_data;
+logic [32-1:0] mem_w_data;
 
-// For $dmem_wr_en.
-logic dmem_wr_en;
+// For mem address
+logic [32-1:0] mem_rw_addr;
 
 // For $funct3.
 logic [2:0] funct3;
@@ -521,19 +515,7 @@ generate
    
    // this implementation treats all loads and all stores the same
    assign is_load  = opcode == 7'b0000011;
-   // $is_s_instr already identifies stores
-   always @ (is_load) begin
-        if (is_load) begin
-            state = LD;
-        end
-   end
-   
-   always @ (is_s_instr) begin
-        if (is_s_instr) begin
-            state = STR;
-        end
-   end
-   
+   // $is_s_instr already identifies stores   
    
    // ---------- (5) ALU ---------------------------------------
    
@@ -581,7 +563,20 @@ generate
    //$rf_wr_index[4:0] = $rd;
    //$rf_wr_data[31:0] = $result; 
    // ...
-
+   always @ (is_load) begin
+        if (is_load) begin
+            state = LD;
+            mem_rw_addr = result;
+        end
+   end
+   
+   always @ (is_s_instr) begin
+        if (is_s_instr) begin
+            state = STR;
+            mem_w_data[32-1:0] = src2_value;
+            mem_rw_addr = result;
+        end
+   end
    // conditional branching logic
    assign taken_br = is_beq ? (src1_value == src2_value) :
                      is_bne ? (src1_value != src2_value) :
@@ -624,34 +619,6 @@ generate
                                               Xreg_value_a0[xreg][32-1:0];
       end
       
-
-
-   // ---------- (7) DMEM ----------------------
-  
-      // get address for load/store
-      assign dmem_addr[$clog2(32)-1:0] = result[6:2];
-      
-      // Loading from DMem
-      assign dmem_rd_en = is_load;
-      assign ld_data[32-1:0] = dmem_rd_en ? Dmem_value_a0[dmem_addr] : 'X;
-      
-      // Storing into DMem
-      assign dmem_wr_en = is_s_instr;     
-      assign dmem_wr_data[32-1:0] = src2_value;
-                 
-      for (dmem = 0; dmem <= 31; dmem++) begin : L1_Dmem //_/dmem
-
-         // For $wr.
-         logic L1_wr;
-
-         assign L1_wr = dmem_wr_en && (dmem_addr == dmem);
-         assign Dmem_value_n1[dmem][32-1:0] = reset_a0 ? 0 :
-                                              L1_wr ? dmem_wr_data :
-                                              Dmem_value_a0[dmem][32-1:0];
-      end
-      
-   
-      
       //-------------------------------------------------------------------------
       
       // for FPGA output: Dmem[2] should have value of 'h15 ('d21)
@@ -672,7 +639,7 @@ generate
              dmem_out = Dmem_value_a0;          
        end
        
-       
+        //----------------------------MEMCONTROL------------------------------------------  
        always @ (state) begin
             case(state)
                 FETCH: begin
@@ -682,16 +649,18 @@ generate
                 end   
                 DECODE: begin
                     rv_m_valid = 1'b0;
+                    //rv_m_addr = 32'bz;
+                    //rv_m_wdata = 32'bz;
                 end
                 LD: begin
                     rv_m_rw = 1'b0;
-                    rv_m_addr = result;
+                    rv_m_addr = mem_rw_addr;
                     rv_m_valid = 1'b1;
                 end
                 STR: begin
                     rv_m_rw = 1'b1;
-                    rv_m_addr = result; 
-                    rv_m_wdata = src2_value;
+                    rv_m_addr = mem_rw_addr; 
+                    rv_m_wdata = mem_w_data;
                     rv_m_valid = 1'b1;
                 end
             endcase 
