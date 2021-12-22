@@ -1,4 +1,4 @@
 riscv_core.cache/
-.vivado.jou
-.vivado.log
+vivado.jou
+vivado.log
 *.str
