@@ -128,7 +128,7 @@
         
         input [32-1:0] rv_m_rdata,
         output reg [32-1:0] rv_m_addr,
-        output reg [32-1:0] rv_m_wdata,
+        output reg [32-1:0] rv_m_wrdata,
 
         output reg [32-1:0] xreg_out [31:0]   // use these 2 outputs only for Simulation,       
    );
@@ -153,7 +153,7 @@ logic [31:0] br_tgt_pc;
 logic [10:0] dec_bits;
 
 // For $dmem_wr_data.
-logic [32-1:0] mem_w_data;
+logic [32-1:0] mem_wr_data;
 
 // For mem address
 logic [32-1:0] mem_rw_addr;
@@ -554,14 +554,15 @@ generate
             mem_rw_addr = result;
         end
    end
-   
-   always @ (is_s_instr) begin
+
+  always @ (is_s_instr) begin
         if (is_s_instr) begin
-            state = STR;
-            mem_w_data[32-1:0] = src2_value;
+            state = STR; 
             mem_rw_addr = result;
+            mem_wr_data = src2_value;
         end
-   end
+      end
+
    // conditional branching logic
    assign taken_br = is_beq ? (src1_value == src2_value) :
                      is_bne ? (src1_value != src2_value) :
@@ -587,7 +588,8 @@ generate
        
       assign src1_value[32-1:0]  =  rf_rd_en1 ? Xreg_value_a0[rf_rd_index1] : 'X;
       assign src2_value[32-1:0]  =  rf_rd_en2 ? Xreg_value_a0[rf_rd_index2] : 'X;
-      
+
+
       // Register File Write (6)
       assign rf_wr_en = rd_valid && (rd != 5'b0);
       assign rf_wr_index[$clog2(32)-1:0]  = rd;
@@ -604,6 +606,7 @@ generate
                                               Xreg_value_a0[xreg][32-1:0];
       end
       
+
       //-------------------------------------------------------------------------
       
        
@@ -620,9 +623,11 @@ generate
                     rv_m_addr = pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
+                   // rv_m_wrdata[32-1:0] = 32'bZ;
                 end   
                 DECODE: begin
                     rv_m_valid = 1'b0;
+                    //rv_m_rw = 1'bz;
                     //rv_m_addr = 32'bz;
                     //rv_m_wdata = 32'bz;
                 end
@@ -630,12 +635,14 @@ generate
                     rv_m_rw = 1'b0;
                     rv_m_addr = mem_rw_addr;
                     rv_m_valid = 1'b1;
+                   // rv_m_wrdata[32-1:0] = 32'bZ;
                 end
                 STR: begin
+                   
                     rv_m_rw = 1'b1;
                     rv_m_addr = mem_rw_addr; 
-                    rv_m_wdata = mem_w_data;
                     rv_m_valid = 1'b1;
+                    rv_m_wrdata[32-1:0] = mem_wr_data;
                 end
             endcase 
        end

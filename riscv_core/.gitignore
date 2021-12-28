@@ -1,4 +1,6 @@
 riscv_core.cache/
+riscv_core.sim/
+riscv_core.runs/
 vivado.jou
 vivado.log
 *.str
