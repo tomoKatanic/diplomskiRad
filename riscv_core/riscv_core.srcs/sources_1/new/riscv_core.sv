@@ -408,15 +408,18 @@ generate
                           is_jal ? br_tgt_pc :
                           is_jalr ? jalr_tgt_pc :
                           pc + 32'd4;
+  
    // ---------- (2) IMEM -----------------------------------
   // `READONLY_MEM(pc, instr[31:0]);
     always @(pc) begin
         state = FETCH;
+        mem_wr_data = 32'b0;
     end
    
    // ---------- (3) DECODE/INSTR_TYPE ----------------------
    always @(instr) begin
         state = DECODE;
+        mem_wr_data = 32'b0;
    end
    assign is_u_instr = instr[6:2] == 5'b00101 ||
                        instr[6:2] == 5'b01101;
@@ -548,20 +551,15 @@ generate
    //$rf_wr_index[4:0] = $rd;
    //$rf_wr_data[31:0] = $result; 
    // ...
-   always @ (is_load) begin
+   always @ * begin
         if (is_load) begin
             state = LD;
             mem_rw_addr = result;
+            mem_wr_data = 32'b0;
         end
    end
 
-  always @ (is_s_instr) begin
-        if (is_s_instr) begin
-            state = STR; 
-            mem_rw_addr = result;
-            mem_wr_data = src2_value;
-        end
-      end
+
 
    // conditional branching logic
    assign taken_br = is_beq ? (src1_value == src2_value) :
@@ -606,7 +604,13 @@ generate
                                               Xreg_value_a0[xreg][32-1:0];
       end
       
-
+  always @ * begin
+        if (is_s_instr) begin
+            state = STR; 
+            mem_rw_addr = result;
+            mem_wr_data = src2_value;
+        end
+      end
       //-------------------------------------------------------------------------
       
        
@@ -617,13 +621,13 @@ generate
        end
        
         //----------------------------MEMCONTROL------------------------------------------  
-       always @ (state) begin
+       always @ * begin
             case(state)
                 FETCH: begin
                     rv_m_addr = pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
-                   // rv_m_wrdata[32-1:0] = 32'bZ;
+                    rv_m_wrdata[32-1:0] = mem_wr_data;
                 end   
                 DECODE: begin
                     rv_m_valid = 1'b0;
@@ -635,14 +639,14 @@ generate
                     rv_m_rw = 1'b0;
                     rv_m_addr = mem_rw_addr;
                     rv_m_valid = 1'b1;
-                   // rv_m_wrdata[32-1:0] = 32'bZ;
+                    rv_m_wrdata[32-1:0] = mem_wr_data;
                 end
                 STR: begin
                    
                     rv_m_rw = 1'b1;
                     rv_m_addr = mem_rw_addr; 
                     rv_m_valid = 1'b1;
-                    rv_m_wrdata[32-1:0] = mem_wr_data;
+                    rv_m_wrdata[32-1:0] = src2_value;
                 end
             endcase 
        end
