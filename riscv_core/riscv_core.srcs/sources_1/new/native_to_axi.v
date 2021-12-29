@@ -42,8 +42,10 @@ module native_to_axi(
     input aw_ready,                  //S when ready to recieve
     
     //write data channel
+    output reg w_valid,             //write data is valid
     output reg [32-1:0] w_data,     //data to write
     output reg [3:0] w_strb,        //wich of 4-bytes are write data
+    input w_ready,                  //S ready to write
     
     //write response channel
     input b_valid,                  //S puts write response valid 
