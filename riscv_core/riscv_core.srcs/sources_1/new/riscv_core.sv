@@ -1,6 +1,7 @@
 
  // test program
- `define READONLY_MEM(ADDR, DATA) logic [31:0] instrs [0:58-1]; assign DATA = instrs[ADDR[$clog2($size(instrs)) + 1 : 2]]; assign instrs = '{{12'b10101, 5'd0, 3'b000, 5'd1, 7'b0010011}, {12'b111, 5'd0, 3'b000, 5'd2, 7'b0010011}, {12'b111111111100, 5'd0, 3'b000, 5'd3, 7'b0010011}, {12'b1011100, 5'd1, 3'b111, 5'd5, 7'b0010011}, {12'b10101, 5'd5, 3'b100, 5'd5, 7'b0010011}, {12'b1011100, 5'd1, 3'b110, 5'd6, 7'b0010011}, {12'b1011100, 5'd6, 3'b100, 5'd6, 7'b0010011}, {12'b111, 5'd1, 3'b000, 5'd7, 7'b0010011}, {12'b11101, 5'd7, 3'b100, 5'd7, 7'b0010011}, {6'b000000, 6'b110, 5'd1, 3'b001, 5'd8, 7'b0010011}, {12'b10101000001, 5'd8, 3'b100, 5'd8, 7'b0010011}, {6'b000000, 6'b10, 5'd1, 3'b101, 5'd9, 7'b0010011}, {12'b100, 5'd9, 3'b100, 5'd9, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b111, 5'd10, 7'b0110011}, {12'b100, 5'd10, 3'b100, 5'd10, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b110, 5'd11, 7'b0110011}, {12'b10110, 5'd11, 3'b100, 5'd11, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b100, 5'd12, 7'b0110011}, {12'b10011, 5'd12, 3'b100, 5'd12, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b000, 5'd13, 7'b0110011}, {12'b11101, 5'd13, 3'b100, 5'd13, 7'b0010011}, {7'b0100000, 5'd2, 5'd1, 3'b000, 5'd14, 7'b0110011}, {12'b1111, 5'd14, 3'b100, 5'd14, 7'b0010011}, {7'b0000000, 5'd2, 5'd2, 3'b001, 5'd15, 7'b0110011}, {12'b1110000001, 5'd15, 3'b100, 5'd15, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b101, 5'd16, 7'b0110011}, {12'b1, 5'd16, 3'b100, 5'd16, 7'b0010011}, {7'b0000000, 5'd1, 5'd2, 3'b011, 5'd17, 7'b0110011}, {12'b0, 5'd17, 3'b100, 5'd17, 7'b0010011}, {12'b10101, 5'd2, 3'b011, 5'd18, 7'b0010011}, {12'b0, 5'd18, 3'b100, 5'd18, 7'b0010011}, {20'b00000000000000000000, 5'd19, 7'b0110111}, {12'b1, 5'd19, 3'b100, 5'd19, 7'b0010011}, {6'b010000, 6'b1, 5'd3, 3'b101, 5'd20, 7'b0010011}, {12'b111111111111, 5'd20, 3'b100, 5'd20, 7'b0010011}, {7'b0000000, 5'd1, 5'd3, 3'b010, 5'd21, 7'b0110011}, {12'b0, 5'd21, 3'b100, 5'd21, 7'b0010011}, {12'b1, 5'd3, 3'b010, 5'd22, 7'b0010011}, {12'b0, 5'd22, 3'b100, 5'd22, 7'b0010011}, {7'b0100000, 5'd2, 5'd1, 3'b101, 5'd23, 7'b0110011}, {12'b1, 5'd23, 3'b100, 5'd23, 7'b0010011}, {20'b00000000000000000100, 5'd4, 7'b0010111}, {6'b000000, 6'b111, 5'd4, 3'b101, 5'd24, 7'b0010011}, {12'b10000000, 5'd24, 3'b100, 5'd24, 7'b0010011}, {1'b0, 10'b0000000010, 1'b0, 8'b00000000, 5'd25, 7'b1101111}, {20'b00000000000000000000, 5'd4, 7'b0010111}, {7'b0000000, 5'd4, 5'd25, 3'b100, 5'd25, 7'b0110011}, {12'b1, 5'd25, 3'b100, 5'd25, 7'b0010011}, {12'b10000, 5'd4, 3'b000, 5'd26, 7'b1100111}, {7'b0100000, 5'd4, 5'd26, 3'b000, 5'd26, 7'b0110011}, {12'b111111110001, 5'd26, 3'b000, 5'd26, 7'b0010011}, {7'b0000000, 5'd1, 5'd2, 3'b010, 5'b00001, 7'b0100011}, {12'b1, 5'd2, 3'b010, 5'd27, 7'b0000011}, {12'b10100, 5'd27, 3'b100, 5'd27, 7'b0010011}, {12'b1, 5'd0, 3'b000, 5'd28, 7'b0010011}, {12'b1, 5'd0, 3'b000, 5'd29, 7'b0010011}, {12'b1, 5'd0, 3'b000, 5'd30, 7'b0010011}, {1'b0, 10'b0000000000, 1'b0, 8'b00000000, 5'd0, 7'b1101111}};
+ 
+ //`define READONLY_MEM(ADDR, DATA) logic [31:0] instrs [0:58-1]; assign DATA = instrs[ADDR[$clog2($size(instrs)) + 1 : 2]]; assign instrs = '{{12'b10101, 5'd0, 3'b000, 5'd1, 7'b0010011}, {12'b111, 5'd0, 3'b000, 5'd2, 7'b0010011}, {12'b111111111100, 5'd0, 3'b000, 5'd3, 7'b0010011}, {12'b1011100, 5'd1, 3'b111, 5'd5, 7'b0010011}, {12'b10101, 5'd5, 3'b100, 5'd5, 7'b0010011}, {12'b1011100, 5'd1, 3'b110, 5'd6, 7'b0010011}, {12'b1011100, 5'd6, 3'b100, 5'd6, 7'b0010011}, {12'b111, 5'd1, 3'b000, 5'd7, 7'b0010011}, {12'b11101, 5'd7, 3'b100, 5'd7, 7'b0010011}, {6'b000000, 6'b110, 5'd1, 3'b001, 5'd8, 7'b0010011}, {12'b10101000001, 5'd8, 3'b100, 5'd8, 7'b0010011}, {6'b000000, 6'b10, 5'd1, 3'b101, 5'd9, 7'b0010011}, {12'b100, 5'd9, 3'b100, 5'd9, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b111, 5'd10, 7'b0110011}, {12'b100, 5'd10, 3'b100, 5'd10, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b110, 5'd11, 7'b0110011}, {12'b10110, 5'd11, 3'b100, 5'd11, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b100, 5'd12, 7'b0110011}, {12'b10011, 5'd12, 3'b100, 5'd12, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b000, 5'd13, 7'b0110011}, {12'b11101, 5'd13, 3'b100, 5'd13, 7'b0010011}, {7'b0100000, 5'd2, 5'd1, 3'b000, 5'd14, 7'b0110011}, {12'b1111, 5'd14, 3'b100, 5'd14, 7'b0010011}, {7'b0000000, 5'd2, 5'd2, 3'b001, 5'd15, 7'b0110011}, {12'b1110000001, 5'd15, 3'b100, 5'd15, 7'b0010011}, {7'b0000000, 5'd2, 5'd1, 3'b101, 5'd16, 7'b0110011}, {12'b1, 5'd16, 3'b100, 5'd16, 7'b0010011}, {7'b0000000, 5'd1, 5'd2, 3'b011, 5'd17, 7'b0110011}, {12'b0, 5'd17, 3'b100, 5'd17, 7'b0010011}, {12'b10101, 5'd2, 3'b011, 5'd18, 7'b0010011}, {12'b0, 5'd18, 3'b100, 5'd18, 7'b0010011}, {20'b00000000000000000000, 5'd19, 7'b0110111}, {12'b1, 5'd19, 3'b100, 5'd19, 7'b0010011}, {6'b010000, 6'b1, 5'd3, 3'b101, 5'd20, 7'b0010011}, {12'b111111111111, 5'd20, 3'b100, 5'd20, 7'b0010011}, {7'b0000000, 5'd1, 5'd3, 3'b010, 5'd21, 7'b0110011}, {12'b0, 5'd21, 3'b100, 5'd21, 7'b0010011}, {12'b1, 5'd3, 3'b010, 5'd22, 7'b0010011}, {12'b0, 5'd22, 3'b100, 5'd22, 7'b0010011}, {7'b0100000, 5'd2, 5'd1, 3'b101, 5'd23, 7'b0110011}, {12'b1, 5'd23, 3'b100, 5'd23, 7'b0010011}, {20'b00000000000000000100, 5'd4, 7'b0010111}, {6'b000000, 6'b111, 5'd4, 3'b101, 5'd24, 7'b0010011}, {12'b10000000, 5'd24, 3'b100, 5'd24, 7'b0010011}, {1'b0, 10'b0000000010, 1'b0, 8'b00000000, 5'd25, 7'b1101111}, {20'b00000000000000000000, 5'd4, 7'b0010111}, {7'b0000000, 5'd4, 5'd25, 3'b100, 5'd25, 7'b0110011}, {12'b1, 5'd25, 3'b100, 5'd25, 7'b0010011}, {12'b10000, 5'd4, 3'b000, 5'd26, 7'b1100111}, {7'b0100000, 5'd4, 5'd26, 3'b000, 5'd26, 7'b0110011}, {12'b111111110001, 5'd26, 3'b000, 5'd26, 7'b0010011}, {7'b0000000, 5'd1, 5'd2, 3'b010, 5'b00001, 7'b0100011}, {12'b1, 5'd2, 3'b010, 5'd27, 7'b0000011}, {12'b10100, 5'd27, 3'b100, 5'd27, 7'b0010011}, {12'b1, 5'd0, 3'b000, 5'd28, 7'b0010011}, {12'b1, 5'd0, 3'b000, 5'd29, 7'b0010011}, {12'b1, 5'd0, 3'b000, 5'd30, 7'b0010011}, {1'b0, 10'b0000000000, 1'b0, 8'b00000000, 5'd0, 7'b1101111}};
 
  // 
  //  Testing each instruction 
@@ -120,36 +121,42 @@
   module core(
         input clk, 
         input reset, 
-        output reg [7:0] dmem_result,
-        output reg [32-1:0] xreg_out [31:0],   // use these 2 outputs only for Simulation, 
-        output reg [32-1:0] dmem_out [31:0]    // comment them when running Implementation
+
+        output reg rv_m_valid,
+        output reg rv_m_rw,
+        input rv_m_ready,
+        
+        input [32-1:0] rv_m_rdata,
+        output reg [32-1:0] rv_m_addr,
+        output reg [32-1:0] rv_m_wrdata,
+
+        output reg [32-1:0] xreg_out [31:0]   // use these 2 outputs only for Simulation,       
    );
 
 
 genvar dmem, xreg;
 
+localparam  
+    FETCH = 2'b00,
+    DECODE = 2'b01,
+    LD = 2'b10,
+    STR = 2'b11;
 
 //
 // Signals declared top-level.
 //
-
+logic [1:0] state;
 // For $br_tgt_pc.
 logic [31:0] br_tgt_pc;
 
 // For $dec_bits.
 logic [10:0] dec_bits;
 
-// For $dmem_addr.
-logic [$clog2(32)-1:0] dmem_addr;
-
-// For $dmem_rd_en.
-logic dmem_rd_en;
-
 // For $dmem_wr_data.
-logic [32-1:0] dmem_wr_data;
+logic [32-1:0] mem_wr_data;
 
-// For $dmem_wr_en.
-logic dmem_wr_en;
+// For mem address
+logic [32-1:0] mem_rw_addr;
 
 // For $funct3.
 logic [2:0] funct3;
@@ -362,10 +369,6 @@ logic [32-1:0] src2_value;
 // For $taken_br.
 logic taken_br;
 
-// For /dmem$value.
-logic [32-1:0] Dmem_value_n1 [31:0],
-               Dmem_value_a0 [31:0];
-
 // For /xreg$value.
 logic [32-1:0] Xreg_value_n1 [31:0],
                Xreg_value_a0 [31:0];
@@ -376,16 +379,8 @@ logic [32-1:0] Xreg_value_n1 [31:0],
 generate
 
    // For $next_pc.
-   always_ff @(posedge clk) next_pc_a1[31:0] <= next_pc[31:0];
-
-
-   //
-   // Scope: /dmem[31:0]
-   //
-   for (dmem = 0; dmem <= 31; dmem++) begin : L1gen_Dmem
-      // For $value.
-      always_ff @(posedge clk) Dmem_value_a0[dmem][32-1:0] <= Dmem_value_n1[dmem][32-1:0];
-
+   always_ff @(posedge clk) begin
+        next_pc_a1[31:0] <= next_pc[31:0];
    end
 
    //
@@ -413,10 +408,19 @@ generate
                           is_jal ? br_tgt_pc :
                           is_jalr ? jalr_tgt_pc :
                           pc + 32'd4;
+  
    // ---------- (2) IMEM -----------------------------------
-   `READONLY_MEM(pc, instr[31:0]);
+  // `READONLY_MEM(pc, instr[31:0]);
+    always @(pc) begin
+        state = FETCH;
+        mem_wr_data = 32'b0;
+    end
    
    // ---------- (3) DECODE/INSTR_TYPE ----------------------
+   always @(instr) begin
+        state = DECODE;
+        mem_wr_data = 32'b0;
+   end
    assign is_u_instr = instr[6:2] == 5'b00101 ||
                        instr[6:2] == 5'b01101;
    // or: $is_u_instr = $instr[6:2] ==? 5'b0x101;             
@@ -499,9 +503,7 @@ generate
    
    // this implementation treats all loads and all stores the same
    assign is_load  = opcode == 7'b0000011;
-   // $is_s_instr already identifies stores
-   
-   
+   // $is_s_instr already identifies stores   
    
    // ---------- (5) ALU ---------------------------------------
    
@@ -549,6 +551,15 @@ generate
    //$rf_wr_index[4:0] = $rd;
    //$rf_wr_data[31:0] = $result; 
    // ...
+   always @ * begin
+        if (is_load) begin
+            state = LD;
+            mem_rw_addr = result;
+            mem_wr_data = 32'b0;
+        end
+   end
+
+
 
    // conditional branching logic
    assign taken_br = is_beq ? (src1_value == src2_value) :
@@ -575,7 +586,8 @@ generate
        
       assign src1_value[32-1:0]  =  rf_rd_en1 ? Xreg_value_a0[rf_rd_index1] : 'X;
       assign src2_value[32-1:0]  =  rf_rd_en2 ? Xreg_value_a0[rf_rd_index2] : 'X;
-      
+
+
       // Register File Write (6)
       assign rf_wr_en = rd_valid && (rd != 5'b0);
       assign rf_wr_index[$clog2(32)-1:0]  = rd;
@@ -592,42 +604,15 @@ generate
                                               Xreg_value_a0[xreg][32-1:0];
       end
       
-
-
-   // ---------- (7) DMEM ----------------------
-  
-      // get address for load/store
-      assign dmem_addr[$clog2(32)-1:0] = result[6:2];
-      
-      // Loading from DMem
-      assign dmem_rd_en = is_load;
-      assign ld_data[32-1:0] = dmem_rd_en ? Dmem_value_a0[dmem_addr] : 'X;
-      
-      // Storing into DMem
-      assign dmem_wr_en = is_s_instr;     
-      assign dmem_wr_data[32-1:0] = src2_value;
-                 
-      for (dmem = 0; dmem <= 31; dmem++) begin : L1_Dmem //_/dmem
-
-         // For $wr.
-         logic L1_wr;
-
-         assign L1_wr = dmem_wr_en && (dmem_addr == dmem);
-         assign Dmem_value_n1[dmem][32-1:0] = reset_a0 ? 0 :
-                                              L1_wr ? dmem_wr_data :
-                                              Dmem_value_a0[dmem][32-1:0];
+  always @ * begin
+        if (is_s_instr) begin
+            state = STR; 
+            mem_rw_addr = result;
+            mem_wr_data = src2_value;
+        end
       end
-      
-   
-      
       //-------------------------------------------------------------------------
       
-      // for FPGA output: Dmem[2] should have value of 'h15 ('d21)
-      //
-       always_ff @(posedge clk) begin
-            if (Dmem_value_a0[2] == 21)
-                dmem_result = 'h15;           
-       end
        
        // for simulation output of all registers
        always_ff @(posedge clk) begin
@@ -635,11 +620,45 @@ generate
                 xreg_out = Xreg_value_a0;          
        end
        
-       // for simulation output of whole Dmem
-       always_ff @(posedge clk) begin
-             dmem_out = Dmem_value_a0;          
+        //----------------------------MEMCONTROL------------------------------------------  
+       always @ * begin
+            case(state)
+                FETCH: begin
+                    rv_m_addr = pc;
+                    rv_m_rw = 1'b0;
+                    rv_m_valid = 1'b1;
+                    rv_m_wrdata[32-1:0] = mem_wr_data;
+                end   
+                DECODE: begin
+                    rv_m_valid = 1'b0;
+                    //rv_m_rw = 1'bz;
+                    //rv_m_addr = 32'bz;
+                    //rv_m_wdata = 32'bz;
+                end
+                LD: begin
+                    rv_m_rw = 1'b0;
+                    rv_m_addr = mem_rw_addr;
+                    rv_m_valid = 1'b1;
+                    rv_m_wrdata[32-1:0] = mem_wr_data;
+                end
+                STR: begin
+                   
+                    rv_m_rw = 1'b1;
+                    rv_m_addr = mem_rw_addr; 
+                    rv_m_valid = 1'b1;
+                    rv_m_wrdata[32-1:0] = src2_value;
+                end
+            endcase 
        end
-       
+       //----------------------------MEM------------------------------------------
+       always @ (rv_m_rdata) begin
+            if (state == FETCH) begin
+                instr = rv_m_rdata;
+            end 
+            else if(state == LD ) begin
+                ld_data = rv_m_rdata;
+            end
+       end
 
 
 endgenerate
