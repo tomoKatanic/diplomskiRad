@@ -87,7 +87,10 @@ assign w_walid = rv_m_valid && rv_m_rw && !wr_data_done;
 assign b_ready = rv_m_valid && rv_m_rw;
 
 //ready for next if read is valid od write is valid
-assign rv_m_ready = r_valid || b_valid;    
+assign rv_m_ready = r_valid || b_valid;   
+
+//read is done, maybe assing X if not r_valid
+assign  rv_m_rdata = r_data;
 
 
 always @(posedge aclk)
