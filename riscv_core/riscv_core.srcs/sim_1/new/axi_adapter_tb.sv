@@ -99,17 +99,48 @@ module axi_adapter_tb(
         .rv_m_addr(rv_m_addr),
         .rv_m_wrdata(rv_m_wrdata)
     );
+    integer i;
     
     initial
         begin
-            aclk <= 0;
-            resetn <= 0;
+            aclk = 0;
+            resetn=0;
+           for(i=0; i<10; i=i+1)
+           begin
+            //read transaction
+            #6 resetn = 1;
+            #8 rv_m_addr = 32'b0 + i;
+            rv_m_rw =0;
+            rv_m_valid =1;
+            #1 ar_ready = 1;
+            #5 r_data = 32'b1 + i;
+            r_valid =1;
+            rv_m_valid = 0;
+            #4  r_valid = 0;
+            //r_data = 32'bX;
+            ar_ready = 0;
+            //time 
+            #7 rv_m_addr = 32'b0 + i;
+            rv_m_wrdata = 32'b1 + i;
+            rv_m_rw =1;
+            rv_m_valid =1;
+            #1 
+            aw_ready = 1;
+            #1w_ready = 1;
+            #4 
+            b_valid =1;
+            rv_m_valid = 0;
+            #3 b_valid = 0;
+            aw_ready = 0;
+            w_ready=0;
+          end
+          
         end
+        
     
     always
         begin
             #5 aclk <= !aclk;    
-            resetn <= 1;
         end
     
 endmodule
