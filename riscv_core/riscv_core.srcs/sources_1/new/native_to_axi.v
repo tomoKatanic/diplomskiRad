@@ -82,7 +82,7 @@ assign aw_prot [2:0] = 3'b000;
 //data for write data
 assign w_data[32-1:0] = rv_m_wrdata;
 assign w_strb[3:0] = 4'b1111;
-assign w_walid = rv_m_valid && rv_m_rw && !wr_data_done;
+assign w_valid = rv_m_valid && rv_m_rw && !wr_data_done;
 
 assign b_ready = rv_m_valid && rv_m_rw;
 
