@@ -60,4 +60,55 @@ module native_to_axi(
     input [32-1:0] rv_m_wrdata      // data to write when rv_m_rw is 1
     
     );
+
+logic addr_r_done;
+logic addr_wr_done;
+logic wr_data_done;
+//logic wr_done;
+
+//addres for read data
+assign ar_valid = rv_m_valid && !rv_m_rw && !addr_r_done;
+assign ar_addr[32-1:0] = rv_m_addr;
+assign ar_prot [2:0] = 3'b000;
+
+//for read data
+assign r_ready = rv_m_valid && !rv_m_rw;
+
+//addres for write data
+assign aw_valid = rv_m_valid && rv_m_rw && !addr_wr_done;
+assign aw_addr[32-1:0] = rv_m_addr;
+assign aw_prot [2:0] = 3'b000;
+
+//data for write data
+assign w_data[32-1:0] = rv_m_wrdata;
+assign w_strb[3:0] = 4'b1111;
+assign w_walid = rv_m_valid && rv_m_rw && !wr_data_done;
+
+assign b_ready = rv_m_valid && rv_m_rw;
+
+//ready for next if read is valid od write is valid
+assign rv_m_ready = r_valid || b_valid;    
+
+
+always @(posedge aclk)
+begin
+    if(!resetn || rv_m_ready || !rv_m_valid) begin
+        addr_r_done <= 1'b0;
+        addr_wr_done <= 1'b0;
+        wr_data_done <= 1'b0;
+    end
+    else begin
+        if(ar_valid && ar_ready) begin
+            addr_r_done <= 1'b1;
+        end
+        if(aw_valid && aw_ready) begin
+            addr_wr_done <= 1'b1;
+        end
+        if(w_valid && w_ready) begin
+            wr_data_done <= 1'b1;
+        end
+    end
+end
+
+
 endmodule
