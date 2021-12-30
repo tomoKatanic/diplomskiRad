@@ -1,0 +1,95 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue Dec 28 18:29:59 2021
+# Process ID: 8732
+# Current directory: C:/source/diplomskiRad/riscv_core
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent9808 C:\source\diplomskiRad\riscv_core\riscv_core.xpr
+# Log file: C:/source/diplomskiRad/riscv_core/vivado.log
+# Journal file: C:/source/diplomskiRad/riscv_core\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/source/diplomskiRad/riscv_core/riscv_core.xpr
+update_compile_order -fileset sources_1
+launch_simulation
+launch_simulation
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+save_wave_config {C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg}
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+current_wave_config {testbench_behav.wcfg}
+add_wave {{/testbench/dut/result}} 
+launch_simulation -mode post-synthesis -type functional
+save_wave_config {C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg}
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+current_wave_config {testbench_behav.wcfg}
+add_wave {{/testbench/dut/src1_value}} 
+save_wave_config {C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg}
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+current_wave_config {testbench_behav.wcfg}
+add_wave {{/testbench/dut/Xreg_value_n1[27]}} 
+save_wave_config {C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg}
+close_sim
+launch_simulation
+open_wave_config C:/source/diplomskiRad/riscv_core/testbench_behav.wcfg
+source testbench.tcl
+close_sim
