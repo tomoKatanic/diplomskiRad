@@ -4,3 +4,6 @@ riscv_core.runs/
 vivado.jou
 vivado.log
 *.str
+*.backup
+*.jou
+*.log
