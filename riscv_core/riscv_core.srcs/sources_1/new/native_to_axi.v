@@ -87,7 +87,9 @@ assign w_valid = rv_m_valid && rv_m_rw && !wr_data_done;
 assign b_ready = rv_m_valid && rv_m_rw;
 
 //ready for next if read is valid od write is valid
-assign rv_m_ready = r_valid || b_valid;   
+assign rv_m_ready = (r_valid && !rv_m_rw) || (b_valid   );   
+//assign rv_m_ready = r_valid || b_valid;
+
 
 //read is done, maybe assing X if not r_valid
 assign  rv_m_rdata = r_data;
@@ -95,7 +97,7 @@ assign  rv_m_rdata = r_data;
 
 always @(posedge aclk)
 begin
-    if(!resetn || rv_m_ready || !rv_m_valid) begin
+    if(!resetn) begin
         addr_r_done <= 1'b0;
         addr_wr_done <= 1'b0;
         wr_data_done <= 1'b0;
@@ -109,6 +111,12 @@ begin
         end
         if(w_valid && w_ready) begin
             wr_data_done <= 1'b1;
+        end
+        if ( rv_m_ready && rv_m_valid || !rv_m_valid ) begin
+            //all done
+             addr_r_done <= 1'b0;
+             addr_wr_done <= 1'b0;
+             wr_data_done <= 1'b0;
         end
     end
 end
