@@ -24,10 +24,13 @@ module top_soc(
     input clk, 
     input reset, 
     
-    output reg [32-1:0] xreg_out [31:0]   // use these 2 outputs only for Simulation,       
+    output reg [32-1:0] xreg_out [31:0],   // use these 2 outputs only for Simulation,    
+    
+    output reg [1 : 0]  s_axi_rresp,
+    output reg [1 : 0] s_axi_bresp
 
     );
-    
+    logic aclk;
        //read address channel
     wire [32-1:0] ar_addr;    //read adress
     wire [2:0] ar_prot;       //xilinx ip ignores, put to 000
@@ -64,11 +67,17 @@ module top_soc(
     wire [32-1:0] rv_m_wrdata;      // data to write when rv_m_rw is 1
     
     logic resetn;
+    logic aresetn;
+    logic areset;
+    assign areset = reset;
     assign resetn = !reset;
+    assign aresetn = !reset;
+   
+    assign aclk = clk;
     
     core cpu(
-        .clk(clk),
-        .reset(reset),
+        .clk(aclk),
+        .reset(areset),
         
         .rv_m_valid(rv_m_valid),
         .rv_m_rw(rv_m_rw),
@@ -120,5 +129,31 @@ module top_soc(
         .rv_m_addr(rv_m_addr),
         .rv_m_wrdata(rv_m_wrdata)
     );
+    
+    
+    
+    
+ blk_mem_gen_0 your_instance_name (
+    .s_aclk(clk),                // input wire s_aclk
+    .s_aresetn(aresetn),          // input wire s_aresetn
+    .s_axi_awaddr(aw_addr),    // input wire [31 : 0] s_axi_awaddr
+    .s_axi_awvalid(aw_valid),  // input wire s_axi_awvalid
+    .s_axi_awready(aw_ready),  // output wire s_axi_awready
+    .s_axi_wdata(w_data),      // input wire [31 : 0] s_axi_wdata
+    .s_axi_wstrb(w_strb),      // input wire [3 : 0] s_axi_wstrb
+    .s_axi_wvalid(w_valid),    // input wire s_axi_wvalid
+    .s_axi_wready(w_ready),    // output wire s_axi_wready
+    .s_axi_bresp(s_axi_bresp),      // output wire [1 : 0] s_axi_bresp
+    .s_axi_bvalid(b_valid),    // output wire s_axi_bvalid
+    .s_axi_bready(b_ready),    // input wire s_axi_bready
+    .s_axi_araddr(ar_addr),    // input wire [31 : 0] s_axi_araddr
+    .s_axi_arvalid(ar_valid),  // input wire s_axi_arvalid
+    .s_axi_arready(ar_ready),  // output wire s_axi_arready
+    .s_axi_rdata(r_data),      // output wire [31 : 0] s_axi_rdata
+    .s_axi_rresp(s_axi_rresp),      // output wire [1 : 0] s_axi_rresp
+    .s_axi_rvalid(r_valid),    // output wire s_axi_rvalid
+    .s_axi_rready(r_ready)    // input wire s_axi_rready
+);
+
     
 endmodule
