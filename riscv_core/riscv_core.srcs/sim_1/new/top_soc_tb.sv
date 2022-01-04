@@ -1,7 +1,7 @@
 `timescale 1ns / 1ns
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
-// Engineer: 
+// Engineer: Tomislav Katanic
 // 
 // Create Date: 01/03/2022 01:51:40 PM
 // Design Name: 
@@ -21,7 +21,6 @@
 
 
 module top_soc_tb(
-
     );
     
     reg clk;
@@ -50,8 +49,6 @@ module top_soc_tb(
             reset <= 1;
             #6 reset <= 0;
         end
-
-
 
     always
         begin
