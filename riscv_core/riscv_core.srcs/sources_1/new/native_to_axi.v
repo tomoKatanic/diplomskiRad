@@ -54,7 +54,7 @@ module native_to_axi(
     //native risc-v signals
     input rv_m_valid,
     input rv_m_rw,                  //is it read 0 od write 1 operation
-    output rv_m_ready,              //maybe not needed
+    output reg rv_m_ready,              //maybe not needed
     output reg [32-1:0] rv_m_rdata, //read data to processor
     input [32-1:0] rv_m_addr,       //address for reading/writing
     input [32-1:0] rv_m_wrdata      // data to write when rv_m_rw is 1
@@ -87,8 +87,8 @@ assign w_valid = rv_m_valid && rv_m_rw && !wr_data_done;
 assign b_ready = rv_m_valid && rv_m_rw;
 
 //ready for next if read is valid od write is valid
-assign rv_m_ready = (r_valid && !rv_m_rw) || (b_valid   );   
-//assign rv_m_ready = r_valid || b_valid;
+//assign rv_m_ready = r_valid && !rv_m_rw  || b_valid && rv_m_rw;   
+assign rv_m_ready = r_valid || b_valid;
 
 
 //read is done, maybe assing X if not r_valid
