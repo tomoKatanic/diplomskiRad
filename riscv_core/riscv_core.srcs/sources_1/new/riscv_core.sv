@@ -137,18 +137,15 @@
 genvar dmem, xreg;
 
 localparam  
-    FETCH = 3'b000,
-    DECODE = 3'b001,
-    LD = 3'b010,
-    STR = 3'b011,
-    AFSTR= 3'b100,
-    AFLD = 3'b101;
+    FETCH = 2'b00,
+    DECODE = 2'b01,
+    LD = 2'b10,
+    STR = 2'b11;
 
 //
 // Signals declared top-level.
 //
-logic [2:0] state;
-logic [2:0]last_state;
+logic [1:0] state;
 // For $br_tgt_pc.
 logic [31:0] br_tgt_pc;
 
@@ -373,11 +370,9 @@ logic [32-1:0] src2_value;
 logic taken_br;
 
 // For /xreg$value.
-reg [32-1:0] Xreg_value_n1 [31:0],
+logic [32-1:0] Xreg_value_n1 [31:0],
                Xreg_value_a0 [31:0];
-logic L1_wr_is_X;
-logic no_op;
-logic b_end;
+
 
 
 
@@ -392,15 +387,13 @@ generate
    // Scope: /xreg[31:0]
    //
    for (xreg = 0; xreg <= 31; xreg++) begin : L1gen_Xreg
-      // For $value.
       always_ff @(posedge clk)begin
-      if(reset == 0)begin
-       Xreg_value_a0[xreg][32-1:0] <= Xreg_value_n1[xreg][32-1:0];
-       end
-       else 
-         Xreg_value_a0[xreg][32-1:0] <= xreg;
-       end
-
+        if(reset == 0)begin
+             Xreg_value_a0[xreg][32-1:0] <= Xreg_value_n1[xreg][32-1:0];
+        end
+        else 
+            Xreg_value_a0[xreg][32-1:0] <= xreg;
+        end
    end
    
 
@@ -418,13 +411,11 @@ generate
                           (taken_br === 1) ? br_tgt_pc :
                           (is_jal === 1) ? br_tgt_pc :
                           (is_jalr === 1) ? jalr_tgt_pc :
-                          (no_op ===1) ? pc :
                           pc + 32'd4;
   
    // ---------- (2) IMEM -----------------------------------
   // `READONLY_MEM(pc, instr[31:0]);
     always @(pc) begin
-        no_op = 1'b0;
         state = FETCH;
         mem_wr_data = 32'b0;
     end
@@ -569,7 +560,7 @@ generate
             state = LD;
             mem_rw_addr = result;
             mem_wr_data = 32'b0;
-        end
+        end 
         else begin
             if(rv_m_ready && state == DECODE) begin
                 state = FETCH;
@@ -624,17 +615,17 @@ generate
       end
       
   always @ * begin
-        if (is_s_instr && state == DECODE) begin
-                state = STR; 
-                mem_rw_addr = result;
-                mem_wr_data = src2_value;
+        if (is_s_instr) begin
+            state = STR; 
+            mem_rw_addr = result;
+            mem_wr_data = src2_value;
         end
         else begin
-            if(rv_m_ready && last_state == DECODE) begin
+            if(rv_m_ready && state == DECODE) begin
                 state = FETCH;
             end
-        end
       end
+   end
       //-------------------------------------------------------------------------
       
        
@@ -652,42 +643,25 @@ generate
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = mem_wr_data;
-                    last_state = FETCH;
                 end   
                 DECODE: begin
                     rv_m_valid = 1'b0;
-                    last_state = DECODE;
                     //rv_m_rw = 1'bz;
                     //rv_m_addr = 32'bz;
                     //rv_m_wdata = 32'bz;
                 end
                 LD: begin
-                    last_state = LD;
                     rv_m_rw = 1'b0;
                     rv_m_addr = mem_rw_addr;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = mem_wr_data;
                 end
                 STR: begin
-                    no_op = 1'b1;
-                    b_end = 1'b0;
-                    last_state = STR;
+                   
                     rv_m_rw = 1'b1;
                     rv_m_addr = mem_rw_addr; 
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = src2_value;
-                 //   if(rv_m_ready) begin
-                   //      rv_m_valid = 0;
-                     //    state = FETCH;
-                    //end
-                end
-                AFSTR: begin
-                    rv_m_valid = 1'b0;
-                    b_end = 1'b1;
-                    no_op = 1'b0;
-                    last_state = AFSTR;
-                end 
-                AFLD: begin
                 end
             endcase 
        end
@@ -700,12 +674,7 @@ generate
                 ld_data = rv_m_rdata;
             end
        end
-       
-        always @ (posedge rv_m_ready) begin
-            if (last_state == STR) begin
-                state = AFSTR;
-            end
-        end
+
 
 endgenerate
 
