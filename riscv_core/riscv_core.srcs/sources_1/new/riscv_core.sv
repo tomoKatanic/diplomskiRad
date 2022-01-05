@@ -387,9 +387,13 @@ generate
    // Scope: /xreg[31:0]
    //
    for (xreg = 0; xreg <= 31; xreg++) begin : L1gen_Xreg
-      // For $value.
-      always_ff @(posedge clk) Xreg_value_a0[xreg][32-1:0] <= Xreg_value_n1[xreg][32-1:0];
-
+      always_ff @(posedge clk)begin
+        if(reset == 0)begin
+             Xreg_value_a0[xreg][32-1:0] <= Xreg_value_n1[xreg][32-1:0];
+        end
+        else 
+            Xreg_value_a0[xreg][32-1:0] <= xreg;
+        end
    end
    
 
@@ -404,9 +408,9 @@ generate
    assign reset_a0 = reset;
    assign pc[31:0] = next_pc_a1;
    assign next_pc[31:0] = reset_a0 ? 32'b0 :
-                          taken_br ? br_tgt_pc :
-                          is_jal ? br_tgt_pc :
-                          is_jalr ? jalr_tgt_pc :
+                          (taken_br === 1) ? br_tgt_pc :
+                          (is_jal === 1) ? br_tgt_pc :
+                          (is_jalr === 1) ? jalr_tgt_pc :
                           pc + 32'd4;
   
    // ---------- (2) IMEM -----------------------------------
@@ -556,6 +560,11 @@ generate
             state = LD;
             mem_rw_addr = result;
             mem_wr_data = 32'b0;
+        end 
+        else begin
+            if(rv_m_ready && state == DECODE) begin
+                state = FETCH;
+            end
         end
    end
 
@@ -599,8 +608,9 @@ generate
          logic L1_wr;
 
          assign L1_wr = rf_wr_en && (rf_wr_index == xreg);
+         assign L1_wr_is_X = (L1_wr === 1'bX);
          assign Xreg_value_n1[xreg][32-1:0] = reset_a0 ? xreg :
-                                              L1_wr ? rf_wr_data :
+                                              (L1_wr && !L1_wr_is_X) ? rf_wr_data :
                                               Xreg_value_a0[xreg][32-1:0];
       end
       
@@ -610,7 +620,12 @@ generate
             mem_rw_addr = result;
             mem_wr_data = src2_value;
         end
+        else begin
+            if(rv_m_ready && state == DECODE) begin
+                state = FETCH;
+            end
       end
+   end
       //-------------------------------------------------------------------------
       
        
