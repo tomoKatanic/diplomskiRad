@@ -374,6 +374,8 @@ logic taken_br;
 // For /xreg$value.
 logic [32-1:0] Xreg_value_n1 [31:0],
                Xreg_value_a0 [31:0];
+               
+logic no_op;
              
  
 
@@ -416,6 +418,7 @@ generate
                           (taken_br === 1) ? br_tgt_pc :
                           (is_jal === 1) ? br_tgt_pc :
                           (is_jalr === 1) ? jalr_tgt_pc :
+                          (no_op === 1) ? pc :
                           pc + 32'd4;
   
    // ---------- (2) IMEM -----------------------------------
@@ -608,9 +611,11 @@ generate
 
 
       // Register File Write (6)
-      assign rf_wr_en = rd_valid && (rd != 5'b0);
+      assign rf_wr_en = is_load ?  state==LD && mem_done == 1 :
+                         rd_valid && (rd != 5'b0);
+                         
       assign rf_wr_index[$clog2(32)-1:0]  = rd;
-      assign rf_wr_data[32-1:0] = is_load ? ld_data : result;
+      assign rf_wr_data[32-1:0] = (is_load && state==LD && mem_done == 1) ? ld_data : result;
           
       for (xreg = 0; xreg <= 31; xreg++) begin : L1_Xreg //_/xreg
 
@@ -669,24 +674,28 @@ generate
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = 32'b0;
+                    no_op = 1'b0;
                 end   
                 DECODE: begin
                     rv_m_addr = pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b0;
                     rv_m_wrdata = 32'b0;
+                    no_op = 1'b0;
                 end
                 LD: begin
                     rv_m_addr = result;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = 32'b0;
+                    no_op = 1'b1;
                 end
                 STR: begin   
                     rv_m_addr = result;  
                     rv_m_rw = 1'b1;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = src2_value;
+                    no_op = 1'b1;
                 end
             endcase 
        end
