@@ -125,6 +125,7 @@
         output reg rv_m_valid,
         output reg rv_m_rw,
         input rv_m_ready,
+        input [1:0] mem_done,
         
         input [32-1:0] rv_m_rdata,
         output reg [32-1:0] rv_m_addr,
@@ -146,6 +147,7 @@ localparam
 // Signals declared top-level.
 //
 logic [1:0] state;
+logic [1:0] next_state;
 // For $br_tgt_pc.
 logic [31:0] br_tgt_pc;
 
@@ -383,6 +385,7 @@ generate
    // For $next_pc.
    always_ff @(posedge clk) begin
         next_pc_a1[31:0] <= next_pc[31:0];
+        state <= next_state;
    end
 
    //
@@ -636,17 +639,14 @@ generate
    */
    
         always @ * begin
-	       if(is_s_instr) begin
-                state = STR; 
+	       if(is_s_instr && state == FETCH || is_s_instr && mem_done !=2 ) begin
+                next_state = STR; 
 	       end
 	       else if(is_load) begin
-		        state = LD;
-	       end
-	       else if(reset_a0) begin
-		        state = FETCH;
+		        next_state = LD;
 	       end
 	       else begin
-		        state = FETCH;	
+		        next_state = FETCH;	
 	       end
         end
    
