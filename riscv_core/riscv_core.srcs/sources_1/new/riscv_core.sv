@@ -376,6 +376,7 @@ logic [32-1:0] Xreg_value_n1 [31:0],
                Xreg_value_a0 [31:0];
                
 logic no_op;
+logic[1:0] ld_done;
              
  
 
@@ -611,11 +612,11 @@ generate
 
 
       // Register File Write (6)
-      assign rf_wr_en = is_load ?  state==LD && mem_done == 1 :
+      assign rf_wr_en = is_load ?  state==LD && mem_done == 1 && ld_done == 2'b10 :
                          rd_valid && (rd != 5'b0);
                          
       assign rf_wr_index[$clog2(32)-1:0]  = rd;
-      assign rf_wr_data[32-1:0] = (is_load && state==LD && mem_done == 1) ? ld_data : result;
+      assign rf_wr_data[32-1:0] = (is_load && state==LD && mem_done == 1 && ld_done == 2'b10) ? ld_data : result;
           
       for (xreg = 0; xreg <= 31; xreg++) begin : L1_Xreg //_/xreg
 
@@ -647,7 +648,7 @@ generate
 	       if(is_s_instr && state == FETCH || is_s_instr && mem_done !=2 ) begin
                 next_state = STR; 
 	       end
-	       else if(is_load) begin
+	       else if(is_load && ld_done != 2'b10) begin
 		        next_state = LD;
 	       end
 	       else begin
@@ -704,13 +705,16 @@ generate
            if (state == FETCH || state == DECODE) begin
                 instr = rv_m_rdata;
                 ld_data = 32'b0;
+                ld_done = 2'b00;
            end 
-           else if(state == LD ) begin
+           else if(state == LD) begin
                 ld_data = rv_m_rdata;
+                ld_done = (ld_done == 2'b01) ? 2'b10 : 2'b01;                         
             end
             else begin
                 //state is STR
                 ld_data = 32'b0;
+                ld_done = 2'b00;
             end
        end
 
