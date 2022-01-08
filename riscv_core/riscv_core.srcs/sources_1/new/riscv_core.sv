@@ -125,6 +125,7 @@
         output reg rv_m_valid,
         output reg rv_m_rw,
         input rv_m_ready,
+        input [1:0] mem_done,
         
         input [32-1:0] rv_m_rdata,
         output reg [32-1:0] rv_m_addr,
@@ -146,6 +147,7 @@ localparam
 // Signals declared top-level.
 //
 logic [1:0] state;
+logic [1:0] next_state;
 // For $br_tgt_pc.
 logic [31:0] br_tgt_pc;
 
@@ -372,6 +374,11 @@ logic taken_br;
 // For /xreg$value.
 logic [32-1:0] Xreg_value_n1 [31:0],
                Xreg_value_a0 [31:0];
+               
+logic no_op;
+logic[1:0] ld_done;
+             
+ 
 
 
 
@@ -381,6 +388,7 @@ generate
    // For $next_pc.
    always_ff @(posedge clk) begin
         next_pc_a1[31:0] <= next_pc[31:0];
+        state <= next_state;
    end
 
    //
@@ -411,20 +419,24 @@ generate
                           (taken_br === 1) ? br_tgt_pc :
                           (is_jal === 1) ? br_tgt_pc :
                           (is_jalr === 1) ? jalr_tgt_pc :
+                          (no_op === 1) ? pc :
                           pc + 32'd4;
   
    // ---------- (2) IMEM -----------------------------------
   // `READONLY_MEM(pc, instr[31:0]);
-    always @(pc) begin
+  
+  /*  always @(pc) begin
         state = FETCH;
         mem_wr_data = 32'b0;
-    end
+    end */
    
    // ---------- (3) DECODE/INSTR_TYPE ----------------------
-   always @(instr) begin
+   
+  /* always @(instr) begin
         state = DECODE;
         mem_wr_data = 32'b0;
-   end
+   end */
+   
    assign is_u_instr = instr[6:2] == 5'b00101 ||
                        instr[6:2] == 5'b01101;
    // or: $is_u_instr = $instr[6:2] ==? 5'b0x101;             
@@ -555,6 +567,8 @@ generate
    //$rf_wr_index[4:0] = $rd;
    //$rf_wr_data[31:0] = $result; 
    // ...
+   
+   /*
    always @ * begin
         if (is_load) begin
             state = LD;
@@ -566,7 +580,7 @@ generate
                 state = FETCH;
             end
         end
-   end
+   end */
 
 
 
@@ -598,9 +612,11 @@ generate
 
 
       // Register File Write (6)
-      assign rf_wr_en = rd_valid && (rd != 5'b0);
+      assign rf_wr_en = is_load ?  state==LD && mem_done == 1 && ld_done == 2'b10 :
+                         rd_valid && (rd != 5'b0);
+                         
       assign rf_wr_index[$clog2(32)-1:0]  = rd;
-      assign rf_wr_data[32-1:0] = is_load ? ld_data : result;
+      assign rf_wr_data[32-1:0] = (is_load && state==LD && mem_done == 1 && ld_done == 2'b10) ? ld_data : result;
           
       for (xreg = 0; xreg <= 31; xreg++) begin : L1_Xreg //_/xreg
 
@@ -608,12 +624,12 @@ generate
          logic L1_wr;
 
          assign L1_wr = rf_wr_en && (rf_wr_index == xreg);
-         assign L1_wr_is_X = (L1_wr === 1'bX);
          assign Xreg_value_n1[xreg][32-1:0] = reset_a0 ? xreg :
-                                              (L1_wr && !L1_wr_is_X) ? rf_wr_data :
+                                              (L1_wr === 1'b1) ? rf_wr_data :
                                               Xreg_value_a0[xreg][32-1:0];
       end
-      
+ 
+ /*     
   always @ * begin
         if (is_s_instr) begin
             state = STR; 
@@ -626,13 +642,29 @@ generate
             end
       end
    end
+   */
+   
+        always @ * begin
+	       if(is_s_instr && state == FETCH || is_s_instr && mem_done !=2 ) begin
+                next_state = STR; 
+	       end
+	       else if(is_load && ld_done != 2'b10) begin
+		        next_state = LD;
+	       end
+	       else begin
+		        next_state = FETCH;	
+	       end
+        end
+   
+   
+   
       //-------------------------------------------------------------------------
       
        
        // for simulation output of all registers
        always_ff @(posedge clk) begin
            if (Xreg_value_a0[5] != 'b0)
-                xreg_out = Xreg_value_a0;          
+                xreg_out <= Xreg_value_a0;          
        end
        
         //----------------------------MEMCONTROL------------------------------------------  
@@ -642,36 +674,47 @@ generate
                     rv_m_addr = pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
-                    rv_m_wrdata[32-1:0] = mem_wr_data;
+                    rv_m_wrdata[32-1:0] = 32'b0;
+                    no_op = 1'b0;
                 end   
                 DECODE: begin
+                    rv_m_addr = pc;
+                    rv_m_rw = 1'b0;
                     rv_m_valid = 1'b0;
-                    //rv_m_rw = 1'bz;
-                    //rv_m_addr = 32'bz;
-                    //rv_m_wdata = 32'bz;
+                    rv_m_wrdata = 32'b0;
+                    no_op = 1'b0;
                 end
                 LD: begin
+                    rv_m_addr = result;
                     rv_m_rw = 1'b0;
-                    rv_m_addr = mem_rw_addr;
                     rv_m_valid = 1'b1;
-                    rv_m_wrdata[32-1:0] = mem_wr_data;
+                    rv_m_wrdata[32-1:0] = 32'b0;
+                    no_op = 1'b1;
                 end
-                STR: begin
-                   
+                STR: begin   
+                    rv_m_addr = result;  
                     rv_m_rw = 1'b1;
-                    rv_m_addr = mem_rw_addr; 
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = src2_value;
+                    no_op = 1'b1;
                 end
             endcase 
        end
        //----------------------------MEM------------------------------------------
-       always @ (rv_m_rdata) begin
-            if (state == FETCH) begin
+       always @ * begin
+           if (state == FETCH || state == DECODE) begin
                 instr = rv_m_rdata;
-            end 
-            else if(state == LD ) begin
+                ld_data = 32'b0;
+                ld_done = 2'b00;
+           end 
+           else if(state == LD) begin
                 ld_data = rv_m_rdata;
+                ld_done = (ld_done == 2'b01) ? 2'b10 : 2'b01;                         
+            end
+            else begin
+                //state is STR
+                ld_data = 32'b0;
+                ld_done = 2'b00;
             end
        end
 
