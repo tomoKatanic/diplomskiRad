@@ -414,12 +414,12 @@ generate
    
    // ---------- (1) PC -------------------------------------
    assign reset_a0 = reset;
-   assign pc[31:0] = next_pc_a1;
+   assign pc[31:0] = (is_load || is_s_instr)? pc : next_pc_a1;
    assign next_pc[31:0] = reset_a0 ? 32'b0 :
                           (taken_br === 1) ? br_tgt_pc :
                           (is_jal === 1) ? br_tgt_pc :
                           (is_jalr === 1) ? jalr_tgt_pc :
-                          (no_op === 1) ? pc :
+                          (no_op === 1) ? next_pc_a1 :
                           pc + 32'd4;
   
    // ---------- (2) IMEM -----------------------------------
