@@ -177,6 +177,7 @@ logic imm_valid;
 
 // For $instr.
 logic [31:0] instr;
+logic [31:0] instr_a0;
 
 // For $is_add.
 logic is_add;
@@ -301,6 +302,7 @@ logic [6:0] opcode;
 
 // For $pc.
 logic [31:0] pc;
+logic [31:0] last_pc;
 
 // For $rd.
 logic [4:0] rd;
@@ -377,6 +379,8 @@ logic [32-1:0] Xreg_value_n1 [31:0],
                
 logic no_op;
 logic[1:0] ld_done;
+logic [32-1:0] addr_read;
+logic [32-1:0] last_read_addr;
              
  
 
@@ -387,6 +391,8 @@ generate
 
    // For $next_pc.
    always_ff @(posedge clk) begin
+        last_read_addr <= addr_read;
+        last_pc <= pc;
         next_pc_a1[31:0] <= next_pc[31:0];
         state <= next_state;
    end
@@ -414,12 +420,14 @@ generate
    
    // ---------- (1) PC -------------------------------------
    assign reset_a0 = reset;
-   assign pc[31:0] = next_pc_a1;
+   assign pc[31:0] = (is_load)? last_pc :
+                     (is_s_instr)? pc : 
+                        next_pc_a1;
    assign next_pc[31:0] = reset_a0 ? 32'b0 :
                           (taken_br === 1) ? br_tgt_pc :
                           (is_jal === 1) ? br_tgt_pc :
                           (is_jalr === 1) ? jalr_tgt_pc :
-                          (no_op === 1) ? pc :
+                          (no_op === 1) ? next_pc_a1 :
                           pc + 32'd4;
   
    // ---------- (2) IMEM -----------------------------------
@@ -436,6 +444,8 @@ generate
         state = DECODE;
         mem_wr_data = 32'b0;
    end */
+   assign instr = (last_pc != last_read_addr && state == FETCH) ?  32'b0 : instr_a0;
+ //  assign instr = (state === STR) ? instr_a0 : instr;
    
    assign is_u_instr = instr[6:2] == 5'b00101 ||
                        instr[6:2] == 5'b01101;
@@ -672,6 +682,7 @@ generate
             case(state)
                 FETCH: begin
                     rv_m_addr = pc;
+                    addr_read = pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = 32'b0;
@@ -679,6 +690,7 @@ generate
                 end   
                 DECODE: begin
                     rv_m_addr = pc;
+                    addr_read = pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b0;
                     rv_m_wrdata = 32'b0;
@@ -686,6 +698,7 @@ generate
                 end
                 LD: begin
                     rv_m_addr = result;
+                    addr_read = result;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = 32'b0;
@@ -693,6 +706,7 @@ generate
                 end
                 STR: begin   
                     rv_m_addr = result;  
+                    addr_read = pc;
                     rv_m_rw = 1'b1;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = src2_value;
@@ -703,7 +717,7 @@ generate
        //----------------------------MEM------------------------------------------
        always @ * begin
            if (state == FETCH || state == DECODE) begin
-                instr = rv_m_rdata;
+                instr_a0 = rv_m_rdata;
                 ld_data = 32'b0;
                 ld_done = 2'b00;
            end 

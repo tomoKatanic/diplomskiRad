@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="555905fs"></ZoomStartTime>
-      <ZoomEndTime time="598556fs"></ZoomEndTime>
-      <Cursor1Time time="585100fs"></Cursor1Time>
+      <ZoomStartTime time="443800fs"></ZoomStartTime>
+      <ZoomEndTime time="517701fs"></ZoomEndTime>
+      <Cursor1Time time="455100fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="117"></NameColumnWidth>
-      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+      <NameColumnWidth column_width="198"></NameColumnWidth>
+      <ValueColumnWidth column_width="91"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="23" />
+   <WVObjectSize size="37" />
    <wave_markers>
       <marker time="40000" label="" />
       <marker time="65000" label="" />
@@ -68,6 +68,14 @@
       <obj_property name="ElementShortName">is_load</obj_property>
       <obj_property name="ObjectShortName">is_load</obj_property>
    </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/instr" type="array">
+      <obj_property name="ElementShortName">instr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">instr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/no_op" type="logic">
+      <obj_property name="ElementShortName">no_op</obj_property>
+      <obj_property name="ObjectShortName">no_op</obj_property>
+   </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/your_instance_name/s_axi_bvalid" type="logic">
       <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
       <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
@@ -101,10 +109,6 @@
       <obj_property name="ElementShortName">mem_done[1:0]</obj_property>
       <obj_property name="ObjectShortName">mem_done[1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/pc" type="array">
-      <obj_property name="ElementShortName">pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">pc[31:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/cpu/rf_wr_en" type="logic">
       <obj_property name="ElementShortName">rf_wr_en</obj_property>
       <obj_property name="ObjectShortName">rf_wr_en</obj_property>
@@ -113,8 +117,60 @@
       <obj_property name="ElementShortName">rf_wr_data[31:0]</obj_property>
       <obj_property name="ObjectShortName">rf_wr_data[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/ld_done" type="logic">
-      <obj_property name="ElementShortName">ld_done</obj_property>
-      <obj_property name="ObjectShortName">ld_done</obj_property>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/ld_done" type="array">
+      <obj_property name="ElementShortName">ld_done[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ld_done[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/pc" type="array">
+      <obj_property name="ElementShortName">pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pc[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/next_pc_a1" type="array">
+      <obj_property name="ElementShortName">next_pc_a1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">next_pc_a1[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/next_pc" type="array">
+      <obj_property name="ElementShortName">next_pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">next_pc[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/last_pc" type="array">
+      <obj_property name="ElementShortName">last_pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">last_pc[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/is_auipc" type="logic">
+      <obj_property name="ElementShortName">is_auipc</obj_property>
+      <obj_property name="ObjectShortName">is_auipc</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/is_srli" type="logic">
+      <obj_property name="ElementShortName">is_srli</obj_property>
+      <obj_property name="ObjectShortName">is_srli</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/is_xori" type="logic">
+      <obj_property name="ElementShortName">is_xori</obj_property>
+      <obj_property name="ObjectShortName">is_xori</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/is_addi" type="logic">
+      <obj_property name="ElementShortName">is_addi</obj_property>
+      <obj_property name="ObjectShortName">is_addi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/last_read_addr" type="array">
+      <obj_property name="ElementShortName">last_read_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">last_read_addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/addr_read" type="array">
+      <obj_property name="ElementShortName">addr_read[31:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_read[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/is_jal" type="logic">
+      <obj_property name="ElementShortName">is_jal</obj_property>
+      <obj_property name="ObjectShortName">is_jal</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/is_jalr" type="logic">
+      <obj_property name="ElementShortName">is_jalr</obj_property>
+      <obj_property name="ObjectShortName">is_jalr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/br_tgt_pc" type="array">
+      <obj_property name="ElementShortName">br_tgt_pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">br_tgt_pc[31:0]</obj_property>
    </wvobject>
 </wave_config>
