@@ -422,9 +422,10 @@ generate
    assign reset_a0 = reset;
    assign pc[31:0] = (is_load)? last_pc :
                      (is_s_instr)? pc : 
+                     (taken_br === 1) ? br_tgt_pc :
                         next_pc_a1;
    assign next_pc[31:0] = reset_a0 ? 32'b0 :
-                          (taken_br === 1) ? br_tgt_pc :
+                        //  (taken_br === 1) ? br_tgt_pc :
                           (is_jal === 1) ? br_tgt_pc :
                           (is_jalr === 1) ? jalr_tgt_pc :
                           (no_op === 1) ? next_pc_a1 :
@@ -603,7 +604,7 @@ generate
                      is_bgeu ? (src1_value >= src2_value) :
                      1'b0;
    
-   assign br_tgt_pc[31:0] = pc + imm;
+   assign br_tgt_pc[31:0] = (taken_br === 1) ? last_pc + imm : pc + imm;
    
    // jumping
    assign jalr_tgt_pc[31:0] = src1_value + imm;
@@ -681,16 +682,16 @@ generate
        always @ * begin
             case(state)
                 FETCH: begin
-                    rv_m_addr = pc;
-                    addr_read = pc;
+                    rv_m_addr = (taken_br === 1) ? br_tgt_pc : pc;
+                    addr_read = (taken_br === 1) ? br_tgt_pc : pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = 32'b0;
                     no_op = 1'b0;
                 end   
                 DECODE: begin
-                    rv_m_addr = pc;
-                    addr_read = pc;
+                    rv_m_addr = (taken_br === 1) ? br_tgt_pc : pc;
+                    addr_read = (taken_br === 1) ? br_tgt_pc : pc;
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b0;
                     rv_m_wrdata = 32'b0;
