@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="443800fs"></ZoomStartTime>
-      <ZoomEndTime time="517701fs"></ZoomEndTime>
-      <Cursor1Time time="455100fs"></Cursor1Time>
+      <ZoomStartTime time="295000fs"></ZoomStartTime>
+      <ZoomEndTime time="672501fs"></ZoomEndTime>
+      <Cursor1Time time="495000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="91"></ValueColumnWidth>
+      <ValueColumnWidth column_width="75"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="37" />
+   <WVObjectSize size="39" />
    <wave_markers>
       <marker time="40000" label="" />
       <marker time="65000" label="" />
@@ -172,5 +172,13 @@
    <wvobject fp_name="/top_soc_tb/dut/cpu/br_tgt_pc" type="array">
       <obj_property name="ElementShortName">br_tgt_pc[31:0]</obj_property>
       <obj_property name="ObjectShortName">br_tgt_pc[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/taken_br" type="logic">
+      <obj_property name="ElementShortName">taken_br</obj_property>
+      <obj_property name="ObjectShortName">taken_br</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/imm" type="array">
+      <obj_property name="ElementShortName">imm[31:0]</obj_property>
+      <obj_property name="ObjectShortName">imm[31:0]</obj_property>
    </wvobject>
 </wave_config>
