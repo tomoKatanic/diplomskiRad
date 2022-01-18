@@ -28,8 +28,8 @@ module top_soc_tb(
     
     wire [32-1:0] xreg_out [31:0];   // use these 2 outputs only for Simulation,    
     
-    wire [1 : 0]  s_axi_rresp;
-    wire [1 : 0] s_axi_bresp;
+    wire [1 : 0]  m_axi_rresp;
+    wire [1 : 0] m_axi_bresp;
    
    
     top_soc dut(
@@ -38,8 +38,8 @@ module top_soc_tb(
     
     .xreg_out(xreg_out), // use these 2 outputs only for Simulation,    
     
-    .s_axi_rresp(s_axi_rresp),
-    .s_axi_bresp(s_axi_bresp)
+    .m_axi_rresp(m_axi_rresp),
+    .m_axi_bresp(m_axi_bresp)
 
     );
     
