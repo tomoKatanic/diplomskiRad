@@ -15,18 +15,18 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="759001fs"></ZoomEndTime>
-      <Cursor1Time time="305100fs"></Cursor1Time>
+      <ZoomStartTime time="2470750fs"></ZoomStartTime>
+      <ZoomEndTime time="2547851fs"></ZoomEndTime>
+      <Cursor1Time time="2535000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="71"></ValueColumnWidth>
+      <ValueColumnWidth column_width="59"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="40" />
+   <WVObjectSize size="41" />
    <wave_markers>
-      <marker time="40000" label="" />
       <marker time="65000" label="" />
+      <marker time="625000" label="" />
    </wave_markers>
    <wvobject fp_name="/top_soc_tb/dut/cpu/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
@@ -111,6 +111,7 @@
    <wvobject fp_name="/top_soc_tb/dut/cpu/xreg_out" type="array">
       <obj_property name="ElementShortName">xreg_out[31:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">xreg_out[31:0][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/cpu/mem_done" type="array">
       <obj_property name="ElementShortName">mem_done[1:0]</obj_property>
@@ -187,5 +188,10 @@
    <wvobject fp_name="/top_soc_tb/dut/cpu/imm" type="array">
       <obj_property name="ElementShortName">imm[31:0]</obj_property>
       <obj_property name="ObjectShortName">imm[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/i" type="array">
+      <obj_property name="ElementShortName">i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>
