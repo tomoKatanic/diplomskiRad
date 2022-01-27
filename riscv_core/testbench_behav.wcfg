@@ -15,15 +15,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="2470750fs"></ZoomStartTime>
-      <ZoomEndTime time="2547851fs"></ZoomEndTime>
-      <Cursor1Time time="2535000fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="105fs"></ZoomEndTime>
+      <Cursor1Time time="2535fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="198"></NameColumnWidth>
-      <ValueColumnWidth column_width="59"></ValueColumnWidth>
+      <NameColumnWidth column_width="195"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="41" />
+   <WVObjectSize size="43" />
    <wave_markers>
       <marker time="65000" label="" />
       <marker time="625000" label="" />
@@ -116,6 +116,14 @@
    <wvobject fp_name="/top_soc_tb/dut/cpu/mem_done" type="array">
       <obj_property name="ElementShortName">mem_done[1:0]</obj_property>
       <obj_property name="ObjectShortName">mem_done[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/axi_adapter/m_axi_rresp" type="array">
+      <obj_property name="ElementShortName">m_axi_rresp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axi_rresp[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/axi_adapter/m_axi_bresp" type="array">
+      <obj_property name="ElementShortName">m_axi_bresp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axi_bresp[1:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/cpu/rf_wr_en" type="logic">
       <obj_property name="ElementShortName">rf_wr_en</obj_property>
