@@ -58,7 +58,11 @@ module native_to_axi(
     output reg [32-1:0] rv_m_rdata, //read data to processor
     input [32-1:0] rv_m_addr,       //address for reading/writing
     input [32-1:0] rv_m_wrdata,      // data to write when rv_m_rw is 1
-    output reg[1:0] mem_done
+    output reg[1:0] mem_done,
+    
+    //response channel
+    input reg [1 : 0] m_axi_rresp,
+    input reg [1 : 0] m_axi_bresp
     );
 
 logic addr_r_done;
@@ -89,8 +93,8 @@ assign b_ready = rv_m_valid && rv_m_rw;
 //ready for next if read is valid od write is valid
 //assign rv_m_ready = r_valid && !rv_m_rw  || b_valid && rv_m_rw;   
 assign rv_m_ready = r_valid || b_valid;
-assign mem_done = (r_valid && !rv_m_rw) ? 2'b01 :
-                  (b_valid && rv_m_rw) ? 2'b10 : 
+assign mem_done = (r_valid && !rv_m_rw && m_axi_rresp === 2'b00) ? 2'b01 :
+                  (b_valid && rv_m_rw &&  m_axi_bresp === 2'b00) ? 2'b10 : 
                   2'b00; 
 
 

@@ -28,18 +28,19 @@ module top_soc_tb(
     
     wire [32-1:0] xreg_out [31:0];   // use these 2 outputs only for Simulation,    
     
-    wire [1 : 0]  s_axi_rresp;
-    wire [1 : 0] s_axi_bresp;
+    wire [1 : 0]  m_axi_rresp;
+    wire [1 : 0] m_axi_bresp;
+    integer i = 1;
    
    
     top_soc dut(
      .clk(clk), 
      .reset(reset), 
     
-    .xreg_out(xreg_out), // use these 2 outputs only for Simulation,    
+    .xreg_out(xreg_out) // use these 2 outputs only for Simulation,    
     
-    .s_axi_rresp(s_axi_rresp),
-    .s_axi_bresp(s_axi_bresp)
+  // .m_axi_rresp(m_axi_rresp),
+   // .m_axi_bresp(m_axi_bresp)
 
     );
     
@@ -55,7 +56,14 @@ module top_soc_tb(
             #5 clk <= !clk;    
         end
          
-
+    always @ (posedge clk or posedge dut.cpu.rv_m_ready) begin
+            i <= i + 1;
+    end
+    
+    always @ (posedge dut.cpu.rv_m_ready) begin
+            $display("num_clk is %d", i);
+            i <= 1;
+    end
 
 
 

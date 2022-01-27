@@ -1,0 +1,1 @@
+--relax --debug typical --mt auto -L noc_lib -L xil_defaultlib -L secureip -L xpm --snapshot demo_1_0 xil_defaultlib.demo_1_0 -log elaborate.log
