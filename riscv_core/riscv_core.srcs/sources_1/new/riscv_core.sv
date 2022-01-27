@@ -660,14 +660,6 @@ generate
                     rv_m_wrdata[32-1:0] = 32'b0;
                     no_op = 1'b0;
                 end   
-                DECODE: begin
-                    rv_m_addr = {4'b0001, pc[27:0]};
-                    addr_read = {4'b0001, pc[27:0]};
-                    rv_m_rw = 1'b0;
-                    rv_m_valid = 1'b0;
-                    rv_m_wrdata = 32'b0;
-                    no_op = 1'b0;
-                end
                 LD: begin
                     rv_m_addr = {4'b0001, result[27:0]};
                     addr_read = {4'b0001, pc[27:0]};
@@ -683,6 +675,15 @@ generate
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = src2_value;
                     no_op = 1'b1;
+                end
+                default: begin
+                    //used to be DECODE state
+                    rv_m_addr = {4'b0001, pc[27:0]};
+                    addr_read = {4'b0001, pc[27:0]};
+                    rv_m_rw = 1'b0;
+                    rv_m_valid = 1'b0;
+                    rv_m_wrdata = 32'b0;
+                    no_op = 1'b0;
                 end
             endcase 
        end
