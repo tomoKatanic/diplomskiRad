@@ -68,7 +68,7 @@ module native_to_axi(
 logic addr_r_done;
 logic addr_wr_done;
 logic wr_data_done;
-//logic wr_done;
+
 
 //addres for read data
 assign ar_valid = rv_m_valid && !rv_m_rw && !addr_r_done;
@@ -91,7 +91,7 @@ assign w_valid = rv_m_valid && rv_m_rw && !wr_data_done;
 assign b_ready = rv_m_valid && rv_m_rw;
 
 //ready for next if read is valid od write is valid
-//assign rv_m_ready = r_valid && !rv_m_rw  || b_valid && rv_m_rw;   
+  
 assign rv_m_ready = r_valid || b_valid;
 assign mem_done = (r_valid && !rv_m_rw && m_axi_rresp === 2'b00) ? 2'b01 :
                   (b_valid && rv_m_rw &&  m_axi_bresp === 2'b00) ? 2'b10 : 
