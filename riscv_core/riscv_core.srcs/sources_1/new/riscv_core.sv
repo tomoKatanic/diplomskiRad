@@ -425,8 +425,7 @@ generate
                      (taken_br === 1 || is_jal === 1) ? br_tgt_pc :
                      (is_jalr === 1) ? jalr_tgt_pc :
                         next_pc_a1;
-   assign next_pc[31:0] = // reset_a0 ? {4'b0001, 28'b0} :
-                           reset_a0 ? 32'b0 :
+   assign next_pc[31:0] =  reset_a0 ? 32'b0 :
                           (taken_br === 1) ? br_tgt_pc :
                           (is_jal === 1) ? br_tgt_pc :
                           (is_jalr === 1) ? jalr_tgt_pc :
@@ -437,21 +436,15 @@ generate
    // ---------- (2) IMEM -----------------------------------
   // `READONLY_MEM(pc, instr[31:0]);
   
-  /*  always @(pc) begin
-        state = FETCH;
-        mem_wr_data = 32'b0;
-    end */
+
    
    // ---------- (3) DECODE/INSTR_TYPE ----------------------
    
-  /* always @(instr) begin
-        state = DECODE;
-        mem_wr_data = 32'b0;
-   end */
+
    assign instr = ({4'b0001, last_pc[27:0]} != last_read_addr && state == FETCH) ?  32'b0 :
                    (state == FETCH && rv_m_ready === 0) ? 32'b0 :  
                    instr_a0;
- //  assign instr = (state === STR) ? instr_a0 : instr;
+ 
    
    assign is_u_instr = instr[6:2] == 5'b00101 ||
                        instr[6:2] == 5'b01101;
@@ -584,19 +577,6 @@ generate
    //$rf_wr_data[31:0] = $result; 
    // ...
    
-   /*
-   always @ * begin
-        if (is_load) begin
-            state = LD;
-            mem_rw_addr = result;
-            mem_wr_data = 32'b0;
-        end 
-        else begin
-            if(rv_m_ready && state == DECODE) begin
-                state = FETCH;
-            end
-        end
-   end */
 
 
 
@@ -645,21 +625,7 @@ generate
                                               Xreg_value_a0[xreg][32-1:0];
       end
  
- /*     
-  always @ * begin
-        if (is_s_instr) begin
-            state = STR; 
-            mem_rw_addr = result;
-            mem_wr_data = src2_value;
-        end
-        else begin
-            if(rv_m_ready && state == DECODE) begin
-                state = FETCH;
-            end
-      end
-   end
-   */
-   
+
         always @ * begin
 	       if(is_s_instr && state == FETCH || is_s_instr && mem_done !=2 ) begin
                 next_state = STR; 
@@ -687,8 +653,6 @@ generate
        always @ * begin
             case(state)
                 FETCH: begin
-                   // rv_m_addr = (taken_br === 1) ? br_tgt_pc : pc;
-                   // addr_read = (taken_br === 1) ? br_tgt_pc : pc;
                     rv_m_addr = {4'b0001, pc[27:0]};
                     addr_read = {4'b0001, pc[27:0]};
                     rv_m_rw = 1'b0;
@@ -697,8 +661,6 @@ generate
                     no_op = 1'b0;
                 end   
                 DECODE: begin
-                   // rv_m_addr = (taken_br === 1) ? br_tgt_pc : pc;
-                   // addr_read = (taken_br === 1) ? br_tgt_pc : pc;
                     rv_m_addr = {4'b0001, pc[27:0]};
                     addr_read = {4'b0001, pc[27:0]};
                     rv_m_rw = 1'b0;
