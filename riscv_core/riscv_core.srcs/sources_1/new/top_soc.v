@@ -26,11 +26,6 @@ module top_soc(
     
     output reg [32-1:0] xreg_out [31:0]  // use these 2 outputs only for Simulation,    
     
-//    output reg [1 : 0]  s_axi_rresp,
- //   output reg [1 : 0] s_axi_bresp,
-   // output reg [1 : 0] m_axi_rresp,
-   // output reg [1 : 0] m_axi_bresp
-
     );
     logic aclk;
        //read address channel for native_to_AXI_adapter
