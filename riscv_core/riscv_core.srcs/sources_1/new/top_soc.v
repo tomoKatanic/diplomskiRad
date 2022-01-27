@@ -24,12 +24,12 @@ module top_soc(
     input clk, 
     input reset, 
     
-    output reg [32-1:0] xreg_out [31:0],   // use these 2 outputs only for Simulation,    
+    output reg [32-1:0] xreg_out [31:0]  // use these 2 outputs only for Simulation,    
     
 //    output reg [1 : 0]  s_axi_rresp,
  //   output reg [1 : 0] s_axi_bresp,
-    output reg [1 : 0] m_axi_rresp,
-    output reg [1 : 0] m_axi_bresp
+   // output reg [1 : 0] m_axi_rresp,
+   // output reg [1 : 0] m_axi_bresp
 
     );
     logic aclk;
@@ -88,6 +88,9 @@ module top_soc(
     wire [1 : 0] s_axi_rresp;
     wire s_axi_rvalid;
     wire s_axi_rready;
+    
+    logic [1 : 0] m_axi_bresp;
+    logic [1 : 0] m_axi_rresp;
     
     
     
@@ -154,7 +157,10 @@ module top_soc(
         .rv_m_rdata(rv_m_rdata),
         .rv_m_addr(rv_m_addr),
         .rv_m_wrdata(rv_m_wrdata),
-        .mem_done(mem_done)
+        .mem_done(mem_done),
+        
+        .m_axi_rresp(m_axi_rresp),
+        .m_axi_bresp(m_axi_bresp)
     );
     
     
