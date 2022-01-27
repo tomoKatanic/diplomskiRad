@@ -37,10 +37,10 @@ module top_soc_tb(
      .clk(clk), 
      .reset(reset), 
     
-    .xreg_out(xreg_out), // use these 2 outputs only for Simulation,    
+    .xreg_out(xreg_out) // use these 2 outputs only for Simulation,    
     
-    .m_axi_rresp(m_axi_rresp),
-    .m_axi_bresp(m_axi_bresp)
+  // .m_axi_rresp(m_axi_rresp),
+   // .m_axi_bresp(m_axi_bresp)
 
     );
     
