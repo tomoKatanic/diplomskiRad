@@ -118,7 +118,12 @@
 //`define READONLY_MEM(ADDR, DATA) logic [31:0] instrs [0:17-1]; assign DATA = instrs[ADDR[$clog2($size(instrs)) + 1 : 2]]; assign instrs = '{{12'b10101, 5'd0, 3'b000, 5'd1, 7'b0010011}, {12'b111111111101, 5'd0, 3'b000, 5'd2, 7'b0010011}, {12'b111111111100, 5'd0, 3'b000, 5'd3, 7'b0010011}, {1'b0, 6'b000000, 5'd2, 5'd3, 3'b100, 4'b0100, 1'b0, 7'b1100011}, {12'b1011100, 5'd1, 3'b111, 5'd6, 7'b0010011}, {1'b0, 6'b000000, 5'd3, 5'd2, 3'b101, 4'b0100, 1'b0, 7'b1100011}, {12'b1011100, 5'd1, 3'b111, 5'd7, 7'b0010011}, {1'b0, 6'b000000, 5'd2, 5'd2, 3'b000, 4'b0100, 1'b0, 7'b1100011}, {12'b1011100, 5'd1, 3'b111, 5'd8, 7'b0010011}, {1'b0, 6'b000000, 5'd2, 5'd3, 3'b001, 4'b0100, 1'b0, 7'b1100011}, {12'b1011100, 5'd1, 3'b111, 5'd9, 7'b0010011}, {1'b0, 6'b000000, 5'd1, 5'd0, 3'b110, 4'b0100, 1'b0, 7'b1100011}, {12'b1011100, 5'd1, 3'b111, 5'd10, 7'b0010011}, {1'b0, 6'b000000, 5'd0, 5'd1, 3'b111, 4'b0100, 1'b0, 7'b1100011}, {12'b1011100, 5'd1, 3'b111, 5'd11, 7'b0010011}, {12'b1011100, 5'd1, 3'b111, 5'd5, 7'b0010011}, {1'b0, 6'b000000, 5'd0, 5'd0, 3'b101, 4'b0000, 1'b0, 7'b1100011}};
 
 
-  module core(
+  module core
+  #(
+    parameter [3:0] addr_prefix = 4'b0001
+  )
+  
+  (
         input clk, 
         input reset, 
 
@@ -441,7 +446,7 @@ generate
    // ---------- (3) DECODE/INSTR_TYPE ----------------------
    
 
-   assign instr = ({4'b0001, last_pc[27:0]} != last_read_addr && state == FETCH) ?  32'b0 :
+   assign instr = ({addr_prefix[3:0], last_pc[27:0]} != last_read_addr && state == FETCH) ?  32'b0 :
                    (state == FETCH && rv_m_ready === 0) ? 32'b0 :  
                    instr_a0;
  
@@ -653,24 +658,24 @@ generate
        always @ * begin
             case(state)
                 FETCH: begin
-                    rv_m_addr = {4'b0001, pc[27:0]};
-                    addr_read = {4'b0001, pc[27:0]};
+                    rv_m_addr = {addr_prefix[3:0], pc[27:0]};
+                    addr_read = {addr_prefix[3:0], pc[27:0]};
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = 32'b0;
                     no_op = 1'b0;
                 end   
                 LD: begin
-                    rv_m_addr = {4'b0001, result[27:0]};
-                    addr_read = {4'b0001, pc[27:0]};
+                    rv_m_addr = {addr_prefix[3:0], result[27:0]};
+                    addr_read = {addr_prefix[3:0], pc[27:0]};
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = 32'b0;
                     no_op = 1'b1;
                 end
                 STR: begin   
-                    rv_m_addr = {4'b0001, result[27:0]};  
-                    addr_read = {4'b0001, pc[27:0]};
+                    rv_m_addr = {addr_prefix[3:0], result[27:0]};  
+                    addr_read = {addr_prefix[3:0], pc[27:0]};
                     rv_m_rw = 1'b1;
                     rv_m_valid = 1'b1;
                     rv_m_wrdata[32-1:0] = src2_value;
@@ -678,8 +683,8 @@ generate
                 end
                 default: begin
                     //used to be DECODE state
-                    rv_m_addr = {4'b0001, pc[27:0]};
-                    addr_read = {4'b0001, pc[27:0]};
+                    rv_m_addr = {addr_prefix[3:0], pc[27:0]};
+                    addr_read = {addr_prefix[3:0], pc[27:0]};
                     rv_m_rw = 1'b0;
                     rv_m_valid = 1'b0;
                     rv_m_wrdata = 32'b0;
