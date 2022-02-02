@@ -549,8 +549,8 @@ generate
                          is_andi ? src1_value & imm :
                          is_ori ? src1_value | imm :
                          is_xori ? src1_value ^ imm :
-                         is_slli ? src1_value << imm[5:0] :
-                         is_srli ? src1_value >> imm[5:0] :
+                         is_slli ? src1_value << imm[4:0] :
+                         is_srli ? src1_value >> imm[4:0] :
                          is_and ? src1_value & src2_value :
                          is_or ? src1_value | src2_value :
                          is_xor ? src1_value ^ src2_value :
