@@ -31,6 +31,7 @@ module top_soc_tb(
     wire [1 : 0]  m_axi_rresp;
     wire [1 : 0] m_axi_bresp;
     integer i = 1;
+    integer j = 1;
    
    
     top_soc dut(
@@ -58,9 +59,19 @@ module top_soc_tb(
     end
     
     always @ (posedge dut.cpu.rv_m_ready) begin
-            $display("num_clk is %d", i);
+            $display("num_clk is i:%d", i);
             i <= 1;
     end
+    
+     always @ (posedge clk or posedge dut.cpu1.rv_m_ready) begin
+            j <= j + 1;
+    end
+    
+    always @ (posedge dut.cpu1.rv_m_ready) begin
+            $display("num_clk is J: %d", j);
+            j <= 1;
+    end
+    
 
 
 
