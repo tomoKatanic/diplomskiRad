@@ -22,10 +22,11 @@
 
 module top_soc(
     input clk, 
-    input reset, 
+    input reset,
     
-    output reg [32-1:0] xreg_out [31:0]  // use these 2 outputs only for Simulation,    
-    
+    //output reg [32-1:0] xreg_out [31:0]  // use these 2 outputs only for Simulation,    
+    output reg [1:0] o_axi_rresp,
+    output reg [1:0] o_axi_rresp1
     );
     logic aclk;
        //read address channel for native_to_AXI_adapter
@@ -95,10 +96,78 @@ module top_soc(
     assign areset = reset;
     assign resetn = !reset;
     assign aresetn = !reset;
+    
+    assign o_axi_rresp = m_axi_rresp;
+    
+    //for connecting second cpu and bram
+    
+    wire [32-1:0] ar_addr1;    //read adress
+    wire [2:0] ar_prot1;       //xilinx ip ignores, put to 000
+    wire ar_valid1;            //read adress valid
+    wire ar_ready1;                 //slave ready to take address
+    
+    //read data channel for native_to_AXI_adapter
+    wire [32-1:0] r_data1;
+    wire r_valid1;                  // S generates when rdata is valid
+    wire r_ready1;             //when is master ready to accept read
+    
+    //write address channel for native_to_AXI_adapter
+    wire [32-1:0] aw_addr1;    //write address
+    wire [2:0] aw_prot1;       //put to 000
+    wire aw_valid1;            //M when addres valid  
+    wire aw_ready1;                  //S when ready to recieve
+    
+    //write data channel for native_to_AXI_adapter
+    wire w_valid1;             //write data is valid
+    wire [32-1:0] w_data1;     //data to write
+    wire [3:0] w_strb1;        //wich of 4-bytes are write data
+    wire w_ready1;                  //S ready to write
+    
+    //write response channel for native_to_AXI_adapter
+    wire b_valid1;                 //S puts write response valid 
+    wire b_ready1;              //M puts when ready to recieve
+    
+    //native risc-v signals for native_to_AXI_adapter
+    wire rv_m_valid1;
+    wire rv_m_rw1;                  //is it read 0 od write 1 operation
+    wire rv_m_ready1;              //maybe not needed
+    wire [1:0] mem_done1;
+    wire [32-1:0] rv_m_rdata1; //read data to processor
+    wire [32-1:0] rv_m_addr1;       //address for reading/writing
+    wire [32-1:0] rv_m_wrdata1;      // data to write when rv_m_rw is 1
+   // logic [32-1:0] xreg_out1 [31:0];
+   
+   // bram AXI IP wires to connect BRAM1 to NOC 
+    wire [31 : 0] s_axi_awaddr1;
+    wire s_axi_awvalid1;
+    wire s_axi_awready1;
+    wire [31 : 0] s_axi_wdata1;
+    wire [3 : 0] s_axi_wstrb1;
+    wire s_axi_wvalid1;
+    wire s_axi_wready1;
+    wire [1 : 0] s_axi_bresp1;
+    wire s_axi_bvalid1;
+    wire s_axi_bready1;
+    wire [31 : 0] s_axi_araddr1;
+    wire s_axi_arvalid1;
+    wire s_axi_arready1;
+    wire [31 : 0] s_axi_rdata1;
+    wire [1 : 0] s_axi_rresp1;
+    wire s_axi_rvalid1;
+    wire s_axi_rready1;
+    
+    logic [1 : 0] m_axi_bresp1;
+    logic [1 : 0] m_axi_rresp1;
+    
+    assign o_axi_rresp1 = m_axi_rresp1;
    
     assign aclk = clk;
     
-    core cpu(
+    core 
+    #(
+        .addr_prefix(4'b0001)
+    )
+    cpu(
         .clk(aclk),
         .reset(areset),
         
@@ -109,9 +178,29 @@ module top_soc(
         
         .rv_m_rdata(rv_m_rdata),
         .rv_m_addr(rv_m_addr),
-        .rv_m_wrdata(rv_m_wrdata),
+        .rv_m_wrdata(rv_m_wrdata)
         
-        .xreg_out(xreg_out)
+       // .xreg_out(xreg_out)
+    );
+    
+    core 
+    #(
+        .addr_prefix(4'b0101)
+    )
+    cpu1 (
+        .clk(aclk),
+        .reset(areset),
+        
+        .rv_m_valid(rv_m_valid1),
+        .rv_m_rw(rv_m_rw1),
+        .rv_m_ready(rv_m_ready1),
+        .mem_done(mem_done1),
+        
+        .rv_m_rdata(rv_m_rdata1),
+        .rv_m_addr(rv_m_addr1),
+        .rv_m_wrdata(rv_m_wrdata1)
+        
+        //.xreg_out(xreg_out1)
     );
     
     native_to_axi axi_adapter (
@@ -158,6 +247,50 @@ module top_soc(
         .m_axi_bresp(m_axi_bresp)
     );
     
+        native_to_axi axi_adapter1 (
+        .aclk(clk),
+        .resetn(resetn),
+    
+    //read address channel
+        .ar_addr(ar_addr1),    
+        .ar_prot(ar_prot1),      
+        .ar_valid(ar_valid1),          
+        .ar_ready(ar_ready1),                
+    
+    //read data channel
+        .r_data(r_data1),
+        .r_valid(r_valid1),                
+        .r_ready(r_ready1),            
+    
+    //write address channel
+        .aw_addr(aw_addr1),   
+        .aw_prot(aw_prot1),       
+        .aw_valid(aw_valid1),         
+        .aw_ready(aw_ready1),                 
+    
+    //write data channel
+        .w_valid(w_valid1),           
+        .w_data(w_data1), 
+        .w_strb(w_strb1),      
+        .w_ready(w_ready1),               
+    
+    //write response channel
+        .b_valid(b_valid1),                 
+        .b_ready(b_ready1),           
+    
+    //native risc-v signals
+        .rv_m_valid(rv_m_valid1),
+        .rv_m_rw(rv_m_rw1),                
+        .rv_m_ready(rv_m_ready1),       
+        .rv_m_rdata(rv_m_rdata1),
+        .rv_m_addr(rv_m_addr1),
+        .rv_m_wrdata(rv_m_wrdata1),
+        .mem_done(mem_done1),
+        
+        .m_axi_rresp(m_axi_rresp1),
+        .m_axi_bresp(m_axi_bresp1)
+    );
+    
     
     
     
@@ -183,6 +316,28 @@ module top_soc(
     .s_axi_rready(s_axi_rready)    // input wire s_axi_rready
 );
 
+blk_mem_gen_1 bram1 (
+  .s_aclk(aclk),                // input wire s_aclk
+  .s_aresetn(aresetn),          // input wire s_aresetn
+  .s_axi_awaddr(s_axi_awaddr1),    // input wire [31 : 0] s_axi_awaddr
+  .s_axi_awvalid(s_axi_awvalid1),  // input wire s_axi_awvalid
+  .s_axi_awready(s_axi_awready1),  // output wire s_axi_awready
+  .s_axi_wdata(s_axi_wdata1),      // input wire [31 : 0] s_axi_wdata
+  .s_axi_wstrb(s_axi_wstrb1),      // input wire [3 : 0] s_axi_wstrb
+  .s_axi_wvalid(s_axi_wvalid1),    // input wire s_axi_wvalid
+  .s_axi_wready(s_axi_wready1),    // output wire s_axi_wready
+  .s_axi_bresp(s_axi_bresp1),      // output wire [1 : 0] s_axi_bresp
+  .s_axi_bvalid(s_axi_bvalid1),    // output wire s_axi_bvalid
+  .s_axi_bready(s_axi_bready1),    // input wire s_axi_bready
+  .s_axi_araddr(s_axi_araddr1),    // input wire [31 : 0] s_axi_araddr
+  .s_axi_arvalid(s_axi_arvalid1),  // input wire s_axi_arvalid
+  .s_axi_arready(s_axi_arready1),  // output wire s_axi_arready
+  .s_axi_rdata(s_axi_rdata1),      // output wire [31 : 0] s_axi_rdata
+  .s_axi_rresp(s_axi_rresp1),      // output wire [1 : 0] s_axi_rresp
+  .s_axi_rvalid(s_axi_rvalid1),    // output wire s_axi_rvalid
+  .s_axi_rready(s_axi_rready1)    // input wire s_axi_rready
+);
+
 demo_1_0 mesh_2_x_2 (
   .clk(clk),                      // input wire clk
   .rst(aresetn),                      // input wire rst
@@ -205,25 +360,25 @@ demo_1_0 mesh_2_x_2 (
   .MNA_0_RRESP(m_axi_rresp),      // output wire [1 : 0] MNA_0_RRESP
   .MNA_0_RVALID(r_valid),    // output wire MNA_0_RVALID
   .MNA_0_RREADY(r_ready),    // input wire MNA_0_RREADY
-  .MNA_1_AWADDR(),    // input wire [31 : 0] MNA_1_AWADDR
-  .MNA_1_AWPROT(),    // input wire [2 : 0] MNA_1_AWPROT
-  .MNA_1_AWVALID(),  // input wire MNA_1_AWVALID
-  .MNA_1_AWREADY(),  // output wire MNA_1_AWREADY
-  .MNA_1_WDATA(),      // input wire [31 : 0] MNA_1_WDATA
-  .MNA_1_WSTRB(),      // input wire [3 : 0] MNA_1_WSTRB
-  .MNA_1_WVALID(),    // input wire MNA_1_WVALID
-  .MNA_1_WREADY(),    // output wire MNA_1_WREADY
-  .MNA_1_ARADDR(),    // input wire [31 : 0] MNA_1_ARADDR
-  .MNA_1_ARPROT(),    // input wire [2 : 0] MNA_1_ARPROT
-  .MNA_1_ARVALID(),  // input wire MNA_1_ARVALID
-  .MNA_1_ARREADY(),  // output wire MNA_1_ARREADY
-  .MNA_1_BRESP(),      // output wire [1 : 0] MNA_1_BRESP
-  .MNA_1_BVALID(),    // output wire MNA_1_BVALID
-  .MNA_1_BREADY(),    // input wire MNA_1_BREADY
-  .MNA_1_RDATA(),      // output wire [31 : 0] MNA_1_RDATA
-  .MNA_1_RRESP(),      // output wire [1 : 0] MNA_1_RRESP
-  .MNA_1_RVALID(),    // output wire MNA_1_RVALID
-  .MNA_1_RREADY(),    // input wire MNA_1_RREADY
+  .MNA_1_AWADDR(aw_addr1),    // input wire [31 : 0] MNA_1_AWADDR
+  .MNA_1_AWPROT(aw_prot1),    // input wire [2 : 0] MNA_1_AWPROT
+  .MNA_1_AWVALID(aw_valid1),  // input wire MNA_1_AWVALID
+  .MNA_1_AWREADY(aw_ready1),  // output wire MNA_1_AWREADY
+  .MNA_1_WDATA(w_data1),      // input wire [31 : 0] MNA_1_WDATA
+  .MNA_1_WSTRB(w_strb1),      // input wire [3 : 0] MNA_1_WSTRB
+  .MNA_1_WVALID(w_valid1),    // input wire MNA_1_WVALID
+  .MNA_1_WREADY(w_ready1),    // output wire MNA_1_WREADY
+  .MNA_1_ARADDR(ar_addr1),    // input wire [31 : 0] MNA_1_ARADDR
+  .MNA_1_ARPROT(ar_prot1),    // input wire [2 : 0] MNA_1_ARPROT
+  .MNA_1_ARVALID(ar_valid1),  // input wire MNA_1_ARVALID
+  .MNA_1_ARREADY(ar_ready1),  // output wire MNA_1_ARREADY
+  .MNA_1_BRESP(m_axi_bresp1),      // output wire [1 : 0] MNA_1_BRESP
+  .MNA_1_BVALID(b_valid1),    // output wire MNA_1_BVALID
+  .MNA_1_BREADY(b_ready1),    // input wire MNA_1_BREADY
+  .MNA_1_RDATA(r_data1),      // output wire [31 : 0] MNA_1_RDATA
+  .MNA_1_RRESP(m_axi_rresp1),      // output wire [1 : 0] MNA_1_RRESP
+  .MNA_1_RVALID(r_valid1),    // output wire MNA_1_RVALID
+  .MNA_1_RREADY(r_ready1),    // input wire MNA_1_RREADY
   .SNA_0_AWADDR(s_axi_awaddr),    // output wire [31 : 0] SNA_0_AWADDR
   .SNA_0_AWPROT(),    // output wire [2 : 0] SNA_0_AWPROT
   .SNA_0_AWVALID(s_axi_awvalid),  // output wire SNA_0_AWVALID
@@ -243,25 +398,25 @@ demo_1_0 mesh_2_x_2 (
   .SNA_0_RRESP(s_axi_rresp),      // input wire [1 : 0] SNA_0_RRESP
   .SNA_0_RVALID(s_axi_rvalid),    // input wire SNA_0_RVALID
   .SNA_0_RREADY(s_axi_rready),    // output wire SNA_0_RREADY
-  .SNA_1_AWADDR(),    // output wire [31 : 0] SNA_1_AWADDR
+  .SNA_1_AWADDR(s_axi_awaddr1),    // output wire [31 : 0] SNA_1_AWADDR
   .SNA_1_AWPROT(),    // output wire [2 : 0] SNA_1_AWPROT
-  .SNA_1_AWVALID(),  // output wire SNA_1_AWVALID
-  .SNA_1_AWREADY(),  // input wire SNA_1_AWREADY
-  .SNA_1_WDATA(),      // output wire [31 : 0] SNA_1_WDATA
-  .SNA_1_WSTRB(),      // output wire [3 : 0] SNA_1_WSTRB
-  .SNA_1_WVALID(),    // output wire SNA_1_WVALID
-  .SNA_1_WREADY(),    // input wire SNA_1_WREADY
-  .SNA_1_ARADDR(),    // output wire [31 : 0] SNA_1_ARADDR
+  .SNA_1_AWVALID(s_axi_awvalid1),  // output wire SNA_1_AWVALID
+  .SNA_1_AWREADY(s_axi_awready1),  // input wire SNA_1_AWREADY
+  .SNA_1_WDATA(s_axi_wdata1),      // output wire [31 : 0] SNA_1_WDATA
+  .SNA_1_WSTRB(s_axi_wstrb1),      // output wire [3 : 0] SNA_1_WSTRB
+  .SNA_1_WVALID(s_axi_wvalid1),    // output wire SNA_1_WVALID
+  .SNA_1_WREADY(s_axi_wready1),    // input wire SNA_1_WREADY
+  .SNA_1_ARADDR(s_axi_araddr1),    // output wire [31 : 0] SNA_1_ARADDR
   .SNA_1_ARPROT(),    // output wire [2 : 0] SNA_1_ARPROT
-  .SNA_1_ARVALID(),  // output wire SNA_1_ARVALID
-  .SNA_1_ARREADY(),  // input wire SNA_1_ARREADY
-  .SNA_1_BRESP(),      // input wire [1 : 0] SNA_1_BRESP
-  .SNA_1_BVALID(),    // input wire SNA_1_BVALID
-  .SNA_1_BREADY(),    // output wire SNA_1_BREADY
-  .SNA_1_RDATA(),      // input wire [31 : 0] SNA_1_RDATA
-  .SNA_1_RRESP(),      // input wire [1 : 0] SNA_1_RRESP
-  .SNA_1_RVALID(),    // input wire SNA_1_RVALID
-  .SNA_1_RREADY()    // output wire SNA_1_RREADY
+  .SNA_1_ARVALID(s_axi_arvalid1),  // output wire SNA_1_ARVALID
+  .SNA_1_ARREADY(s_axi_arready1),  // input wire SNA_1_ARREADY
+  .SNA_1_BRESP(s_axi_bresp1),      // input wire [1 : 0] SNA_1_BRESP
+  .SNA_1_BVALID(s_axi_bvalid1),    // input wire SNA_1_BVALID
+  .SNA_1_BREADY(s_axi_bready1),    // output wire SNA_1_BREADY
+  .SNA_1_RDATA(s_axi_rdata1),      // input wire [31 : 0] SNA_1_RDATA
+  .SNA_1_RRESP(s_axi_rresp1),      // input wire [1 : 0] SNA_1_RRESP
+  .SNA_1_RVALID(s_axi_rvalid1),    // input wire SNA_1_RVALID
+  .SNA_1_RREADY(s_axi_rready1)    // output wire SNA_1_RREADY
 );
 
     
