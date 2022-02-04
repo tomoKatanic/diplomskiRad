@@ -22,10 +22,11 @@
 
 module top_soc(
     input clk, 
-    input reset, 
+    input reset,
     
-    output reg [32-1:0] xreg_out [31:0]  // use these 2 outputs only for Simulation,    
-    
+    //output reg [32-1:0] xreg_out [31:0]  // use these 2 outputs only for Simulation,    
+    output reg [1:0] o_axi_rresp,
+    output reg [1:0] o_axi_rresp1
     );
     logic aclk;
        //read address channel for native_to_AXI_adapter
@@ -96,6 +97,8 @@ module top_soc(
     assign resetn = !reset;
     assign aresetn = !reset;
     
+    assign o_axi_rresp = m_axi_rresp;
+    
     //for connecting second cpu and bram
     
     wire [32-1:0] ar_addr1;    //read adress
@@ -132,7 +135,7 @@ module top_soc(
     wire [32-1:0] rv_m_rdata1; //read data to processor
     wire [32-1:0] rv_m_addr1;       //address for reading/writing
     wire [32-1:0] rv_m_wrdata1;      // data to write when rv_m_rw is 1
-    logic [32-1:0] xreg_out1 [31:0];
+   // logic [32-1:0] xreg_out1 [31:0];
    
    // bram AXI IP wires to connect BRAM1 to NOC 
     wire [31 : 0] s_axi_awaddr1;
@@ -156,6 +159,7 @@ module top_soc(
     logic [1 : 0] m_axi_bresp1;
     logic [1 : 0] m_axi_rresp1;
     
+    assign o_axi_rresp1 = m_axi_rresp1;
    
     assign aclk = clk;
     
@@ -174,9 +178,9 @@ module top_soc(
         
         .rv_m_rdata(rv_m_rdata),
         .rv_m_addr(rv_m_addr),
-        .rv_m_wrdata(rv_m_wrdata),
+        .rv_m_wrdata(rv_m_wrdata)
         
-        .xreg_out(xreg_out)
+       // .xreg_out(xreg_out)
     );
     
     core 
@@ -194,9 +198,9 @@ module top_soc(
         
         .rv_m_rdata(rv_m_rdata1),
         .rv_m_addr(rv_m_addr1),
-        .rv_m_wrdata(rv_m_wrdata1),
+        .rv_m_wrdata(rv_m_wrdata1)
         
-        .xreg_out(xreg_out1)
+        //.xreg_out(xreg_out1)
     );
     
     native_to_axi axi_adapter (
@@ -405,7 +409,7 @@ demo_1_0 mesh_2_x_2 (
   .SNA_1_ARADDR(s_axi_araddr1),    // output wire [31 : 0] SNA_1_ARADDR
   .SNA_1_ARPROT(),    // output wire [2 : 0] SNA_1_ARPROT
   .SNA_1_ARVALID(s_axi_arvalid1),  // output wire SNA_1_ARVALID
-  .SNA_1_ARREADY(s_axi_wready1),  // input wire SNA_1_ARREADY
+  .SNA_1_ARREADY(s_axi_arready1),  // input wire SNA_1_ARREADY
   .SNA_1_BRESP(s_axi_bresp1),      // input wire [1 : 0] SNA_1_BRESP
   .SNA_1_BVALID(s_axi_bvalid1),    // input wire SNA_1_BVALID
   .SNA_1_BREADY(s_axi_bready1),    // output wire SNA_1_BREADY
