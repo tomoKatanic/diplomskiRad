@@ -26,10 +26,10 @@ module top_soc_tb(
     reg clk;
     reg reset; 
     
-    wire [32-1:0] xreg_out [31:0];   // use these 2 outputs only for Simulation,    
+  //  wire [32-1:0] xreg_out [31:0];   // use these 2 outputs only for Simulation,    
     
-    wire [1 : 0]  m_axi_rresp;
-    wire [1 : 0] m_axi_bresp;
+    wire [1 : 0]  o_axi_rresp;
+    wire [1 : 0] o_axi_rresp1;
     integer i = 1;
     integer j = 1;
    
@@ -38,7 +38,8 @@ module top_soc_tb(
      .clk(clk), 
      .reset(reset), 
     
-    .xreg_out(xreg_out) // use these 2 outputs only for Simulation,    
+    .o_axi_rresp(o_axi_rresp), // use these 2 outputs only for Simulation, 
+    .o_axi_rresp1(o_axi_rresp1)   
     
     );
     
