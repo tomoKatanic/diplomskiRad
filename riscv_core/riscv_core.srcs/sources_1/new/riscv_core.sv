@@ -134,9 +134,9 @@
         
         input [32-1:0] rv_m_rdata,
         output reg [32-1:0] rv_m_addr,
-        output reg [32-1:0] rv_m_wrdata,
+        output reg [32-1:0] rv_m_wrdata
 
-        output reg [32-1:0] xreg_out [31:0]   // use these 2 outputs only for Simulation,       
+        //output reg [32-1:0] xreg_out [31:0]   // use these 2 outputs only for Simulation,       
    );
 
 
@@ -649,10 +649,10 @@ generate
       
        
        // for simulation output of all registers
-       always_ff @(posedge clk) begin
+  /*     always_ff @(posedge clk) begin
            if (Xreg_value_a0[5] != 'b0)
                 xreg_out <= Xreg_value_a0;          
-       end
+       end */
        
         //----------------------------MEMCONTROL------------------------------------------  
        always @ * begin
