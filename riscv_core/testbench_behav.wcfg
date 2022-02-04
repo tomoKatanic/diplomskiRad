@@ -15,15 +15,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="105fs"></ZoomEndTime>
-      <Cursor1Time time="2535fs"></Cursor1Time>
+      <ZoomStartTime time="526054994fs"></ZoomStartTime>
+      <ZoomEndTime time="526055002fs"></ZoomEndTime>
+      <Cursor1Time time="526055000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="195"></NameColumnWidth>
+      <NameColumnWidth column_width="191"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="43" />
+   <WVObjectSize size="28" />
    <wave_markers>
       <marker time="65000" label="" />
       <marker time="625000" label="" />
@@ -52,10 +52,6 @@
       <obj_property name="ElementShortName">rv_m_rdata[31:0]</obj_property>
       <obj_property name="ObjectShortName">rv_m_rdata[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/axi_adapter/r_data" type="array">
-      <obj_property name="ElementShortName">r_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">r_data[31:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/cpu/rv_m_addr" type="array">
       <obj_property name="ElementShortName">rv_m_addr[31:0]</obj_property>
       <obj_property name="ObjectShortName">rv_m_addr[31:0]</obj_property>
@@ -68,138 +64,136 @@
       <obj_property name="ElementShortName">state[1:0]</obj_property>
       <obj_property name="ObjectShortName">state[1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_s_instr" type="logic">
-      <obj_property name="ElementShortName">is_s_instr</obj_property>
-      <obj_property name="ObjectShortName">is_s_instr</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_load" type="logic">
-      <obj_property name="ElementShortName">is_load</obj_property>
-      <obj_property name="ObjectShortName">is_load</obj_property>
-   </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/cpu/instr" type="array">
       <obj_property name="ElementShortName">instr[31:0]</obj_property>
       <obj_property name="ObjectShortName">instr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/no_op" type="logic">
-      <obj_property name="ElementShortName">no_op</obj_property>
-      <obj_property name="ObjectShortName">no_op</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/your_instance_name/s_axi_bvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/your_instance_name/s_axi_rvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_rvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/your_instance_name/s_axi_rready" type="logic">
-      <obj_property name="ElementShortName">s_axi_rready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_rready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/your_instance_name/s_axi_arready" type="logic">
-      <obj_property name="ElementShortName">s_axi_arready</obj_property>
-      <obj_property name="ObjectShortName">s_axi_arready</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/axi_adapter/ar_addr" type="array">
-      <obj_property name="ElementShortName">ar_addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ar_addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/your_instance_name/s_axi_bvalid" type="logic">
-      <obj_property name="ElementShortName">s_axi_bvalid</obj_property>
-      <obj_property name="ObjectShortName">s_axi_bvalid</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/xreg_out" type="array">
-      <obj_property name="ElementShortName">xreg_out[31:0][31:0]</obj_property>
-      <obj_property name="ObjectShortName">xreg_out[31:0][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/cpu/mem_done" type="array">
       <obj_property name="ElementShortName">mem_done[1:0]</obj_property>
       <obj_property name="ObjectShortName">mem_done[1:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/axi_adapter/m_axi_rresp" type="array">
-      <obj_property name="ElementShortName">m_axi_rresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_rresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/axi_adapter/m_axi_bresp" type="array">
-      <obj_property name="ElementShortName">m_axi_bresp[1:0]</obj_property>
-      <obj_property name="ObjectShortName">m_axi_bresp[1:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/rf_wr_en" type="logic">
-      <obj_property name="ElementShortName">rf_wr_en</obj_property>
-      <obj_property name="ObjectShortName">rf_wr_en</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/rf_wr_data" type="array">
-      <obj_property name="ElementShortName">rf_wr_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rf_wr_data[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/ld_done" type="array">
-      <obj_property name="ElementShortName">ld_done[1:0]</obj_property>
-      <obj_property name="ObjectShortName">ld_done[1:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="/top_soc_tb/dut/cpu/pc" type="array">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
       <obj_property name="ObjectShortName">pc[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/next_pc_a1" type="array">
-      <obj_property name="ElementShortName">next_pc_a1[31:0]</obj_property>
-      <obj_property name="ObjectShortName">next_pc_a1[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/next_pc" type="array">
-      <obj_property name="ElementShortName">next_pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">next_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/last_pc" type="array">
-      <obj_property name="ElementShortName">last_pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">last_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_auipc" type="logic">
-      <obj_property name="ElementShortName">is_auipc</obj_property>
-      <obj_property name="ObjectShortName">is_auipc</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_srli" type="logic">
-      <obj_property name="ElementShortName">is_srli</obj_property>
-      <obj_property name="ObjectShortName">is_srli</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_xori" type="logic">
-      <obj_property name="ElementShortName">is_xori</obj_property>
-      <obj_property name="ObjectShortName">is_xori</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_addi" type="logic">
-      <obj_property name="ElementShortName">is_addi</obj_property>
-      <obj_property name="ObjectShortName">is_addi</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/last_read_addr" type="array">
-      <obj_property name="ElementShortName">last_read_addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">last_read_addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/addr_read" type="array">
-      <obj_property name="ElementShortName">addr_read[31:0]</obj_property>
-      <obj_property name="ObjectShortName">addr_read[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_jal" type="logic">
-      <obj_property name="ElementShortName">is_jal</obj_property>
-      <obj_property name="ObjectShortName">is_jal</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/is_jalr" type="logic">
-      <obj_property name="ElementShortName">is_jalr</obj_property>
-      <obj_property name="ObjectShortName">is_jalr</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/br_tgt_pc" type="array">
-      <obj_property name="ElementShortName">br_tgt_pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">br_tgt_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/taken_br" type="logic">
-      <obj_property name="ElementShortName">taken_br</obj_property>
-      <obj_property name="ObjectShortName">taken_br</obj_property>
-   </wvobject>
-   <wvobject fp_name="/top_soc_tb/dut/cpu/imm" type="array">
-      <obj_property name="ElementShortName">imm[31:0]</obj_property>
-      <obj_property name="ObjectShortName">imm[31:0]</obj_property>
+   <wvobject fp_name="/top_soc_tb/dut/cpu/Xreg_value_a0" type="array">
+      <obj_property name="ElementShortName">Xreg_value_a0[31:0][31:0]</obj_property>
+      <obj_property name="ObjectShortName">Xreg_value_a0[31:0][31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/top_soc_tb/i" type="array">
       <obj_property name="ElementShortName">i[31:0]</obj_property>
       <obj_property name="ObjectShortName">i[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/rv_m_valid" type="logic">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">rv_m_valid</obj_property>
+      <obj_property name="ObjectShortName">rv_m_valid</obj_property>
+      <obj_property name="label">rv_m_valid1</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/rv_m_rw" type="logic">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">rv_m_rw</obj_property>
+      <obj_property name="ObjectShortName">rv_m_rw</obj_property>
+      <obj_property name="label">rv_m_rw1</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/rv_m_ready" type="logic">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">rv_m_ready</obj_property>
+      <obj_property name="ObjectShortName">rv_m_ready</obj_property>
+      <obj_property name="label">rv_m_ready1</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/mem_done" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">mem_done[1:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_done[1:0]</obj_property>
+      <obj_property name="label">mem_done1[1:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/rv_m_rdata" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">rv_m_rdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rv_m_rdata[31:0]</obj_property>
+      <obj_property name="label">rv_m_rdata1[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/rv_m_addr" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">rv_m_addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rv_m_addr[31:0]</obj_property>
+      <obj_property name="label">rv_m_addr1[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/rv_m_wrdata" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">rv_m_wrdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rv_m_wrdata[31:0]</obj_property>
+      <obj_property name="label">rv_m_wrdata1[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/state" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">state[1:0]</obj_property>
+      <obj_property name="ObjectShortName">state[1:0]</obj_property>
+      <obj_property name="label">state1[1:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/br_tgt_pc" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">br_tgt_pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">br_tgt_pc[31:0]</obj_property>
+      <obj_property name="label">br_tgt_pc1[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/instr" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">instr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">instr[31:0]</obj_property>
+      <obj_property name="label">instr1[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/pc" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pc[31:0]</obj_property>
+      <obj_property name="label">pc1[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/taken_br" type="logic">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">taken_br</obj_property>
+      <obj_property name="ObjectShortName">taken_br</obj_property>
+      <obj_property name="label">taken_br1</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/dut/cpu1/Xreg_value_a0" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">Xreg_value_a0[31:0][31:0]</obj_property>
+      <obj_property name="ObjectShortName">Xreg_value_a0[31:0][31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="label">Xreg_value_a01[31:0][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/top_soc_tb/j" type="array">
+      <obj_property name="ElementShortName">j[31:0]</obj_property>
+      <obj_property name="ObjectShortName">j[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#0000FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
       <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
 </wave_config>
